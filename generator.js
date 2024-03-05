@@ -1,5 +1,4 @@
-import paper from "paper"
-const { Rectangle, Point } = paper ;
+const { Rectangle, Point } = require("paper/dist/paper-core");
 import { defineSynthSize } from "./synth-components.js";
 
 var bottomCanvasHeight = window.innerHeight;
