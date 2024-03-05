@@ -1,6 +1,5 @@
+import { Rectangle, Point } from "paper/dist/paper-core";
 import { defineSynthSize } from "./synth-components.js";
-const { Rectangle, Point } = require('paper/dist/paper-core')
-// const { Rectangle, Point } = require("node_modules/paper/dist/paper-core.js");
 
 var bottomCanvasHeight = window.innerHeight;
 var bottomCanvasWidth = window.innerWidth;
