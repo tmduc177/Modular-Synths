@@ -1,42 +1,37 @@
-var bottomCanvasHeight = window.innerHeight
-var bottomCanvasWidth = window.innerWidth
+import { defineSynthSize } from "./synth-components.js";
+const { Rectangle, Point } = require('paper/dist/paper-core')
+// const { Rectangle, Point } = require("node_modules/paper/dist/paper-core.js");
 
-var drawableCanvasHeight = bottomCanvasHeight * 0.9
-var drawableCanvasWidth = bottomCanvasWidth * 0.9
+var bottomCanvasHeight = window.innerHeight;
+var bottomCanvasWidth = window.innerWidth;
+
+var drawableCanvasHeight = bottomCanvasHeight * 0.9;
+var drawableCanvasWidth = bottomCanvasWidth * 0.9;
+
+console.log('fill width ', bottomCanvasWidth);
+console.log('fill height ', bottomCanvasHeight);
+console.log('canvas width ', drawableCanvasWidth)
+console.log('canvas height ', drawableCanvasHeight)
+
+var defaultStrokeColor = 'white';
+const grid_size = 10;
 
 if (bottomCanvasWidth < 768) {
     drawableCanvasWidth = bottomCanvasWidth * 0.8
 }
 
-console.log('bottom width ', bottomCanvasWidth)
-console.log('bottom height ', bottomCanvasHeight)
-console.log('---')
-console.log('top width ', drawableCanvasWidth)
-console.log('top height ', drawableCanvasHeight)
-
 window.onload = function() {
-    var canvas1 = document.getElementById('canvas1');
-    paper.setup(canvas1);
-    canvas1.width = bottomCanvasWidth
-    canvas1.height = bottomCanvasHeight
+    var backgroundFill = document.getElementById('background-fill');
+    paper.setup(backgroundFill);
+    backgroundFill.width = bottomCanvasWidth
+    backgroundFill.height = bottomCanvasHeight
 
-    // Create and draw on the first canvas
-    var path1 = new paper.Path();
-    path1.strokeColor = 'black';
-    path1.add(new paper.Point(50, 50));
-    path1.add(new paper.Point(150, 150));
-    paper.view.draw();
+    var mainCanvas = document.getElementById('main-canvas');
+    paper.setup(mainCanvas);
+    mainCanvas.width = drawableCanvasWidth;
+    mainCanvas.height = drawableCanvasHeight;
 
-    // Setup Paper.js for the second canvas
-    var canvas2 = document.getElementById('canvas2');
-    paper.setup(canvas2);
-    canvas2.width = drawableCanvasWidth;
-    canvas2.height = drawableCanvasHeight;
-
-    // Create and draw on the second canvas
-    var path2 = new paper.Path();
-    path2.strokeColor = 'red';
-    path2.add(new paper.Point(150, 50));
-    path2.add(new paper.Point(50, 150));
-    paper.view.draw();
+    var synthSize = defineSynthSize(drawableCanvasWidth, drawableCanvasHeight, grid_size);
+    var synthContainer = new Rectangle(new Point(0,0), new Point(synthSize.w, synthSize.h));
+    synthContainer.strokeColor = defaultStrokeColor;
 }
