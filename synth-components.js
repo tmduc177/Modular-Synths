@@ -12,8 +12,13 @@ function getRandomInt(max) {
 // (say that default grid size is 10)
 // ([width, height]) [60,180], [100, 100], [180, 60]
 export function defineSynthSize(maxWidth, maxHeight, defaultGridSize) {
-    var synthWidth = maxWidth - (getRandomInt(4) * (2 * defaultGridSize));
-    var synthHeight = maxHeight - (getRandomInt(4) * (2 * defaultGridSize));
+    var widthGridCount = Math.round(maxWidth / defaultGridSize)
+    var heightGridCount = Math.round(maxHeight / defaultGridSize)
+
+    // The synth must also be not smaller than half the canvas' width and height
+    // divide by 4 because both sides
+    var synthWidth = maxWidth - (getRandomInt(widthGridCount / 4) * (2 * defaultGridSize));
+    var synthHeight = maxHeight - (getRandomInt(heightGridCount / 4) * (2 * defaultGridSize));
     var minSizes = [
         [defaultGridSize * 6, defaultGridSize * 18],
         [defaultGridSize * 10, defaultGridSize * 10],
