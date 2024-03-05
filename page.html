@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.15/paper-full.min.js"></script>
+
+        <style>
+            body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Hide scrollbars */
+            }
+
+            #canvas1 {
+                background-color: #121212;
+                display: block;
+            }
+        
+            #canvas2 {
+                background-color: lightgreen;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 1; 
+                top: 5%; 
+                left: 5%; 
+            }
+
+            @media screen and (max-width: 768px) {
+                #canvas2 {
+                    left: 10%; 
+                }
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <canvas id="canvas1" resize></canvas>
+        <canvas id="canvas2" resize></canvas>
+        <script src="generator.js"></script>
+    </body>
+    
+</html>
