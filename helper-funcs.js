@@ -9,3 +9,8 @@ export function getRandomInt(min, max) {
 export function decimalPoint(number ,decimal_point) {
     return Math.floor(number * (10 ** decimal_point)) / (10 ** decimal_point)
 }
+
+export function strokePath(path, stroke_width = 2, stroke_color = "white") {
+    path.strokeWidth = stroke_width
+    path.strokeColor = stroke_color
+}
