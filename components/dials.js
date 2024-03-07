@@ -14,6 +14,7 @@ const dials = {
 export class SingleDial {
     constructor(
         grid_size,
+        color = 'white',
         spacing_multiplier = getRandomElement(dials.spacing_multiplier),
         size = getRandomElement(dials.size_multiplier),
         turn_limit = Math.random() > 0.5 ? true : false,
@@ -27,7 +28,8 @@ export class SingleDial {
         markings_distance_multiplier = getRandomElement(dials.markings_distance_multiplier),
         center_coords = [0, 0]
     ) {
-        this.grid_size = grid_size
+        this.grid_size = grid_size;
+        this.color = color;
         this.style = {
             spacing_multiplier: spacing_multiplier,
             size: size,
@@ -43,13 +45,13 @@ export class SingleDial {
             markings_distance_multiplier: markings_distance_multiplier,
             markings_quantity: highlights_quantity * getRandomInt(2,4),
         };
+
         
         this.dial_radius = (this.style.size * grid_size) / 2;
         this.inner_border_radius = this.inner_border ? 0 : this.dial_radius * 0.8;
-        this.spacing = this.style.spacing_multiplier * this.grid_size
-        this.full_radius = this.dial_radius + this.spacing
+        this.dial_spacing = this.style.spacing_multiplier * this.grid_size
+        this.full_radius = this.dial_radius + this.dial_spacing
 
-        // this.center_coords = grid_size * this.style.spacing_multiplier + this.dial_radius;
         this.center_x = grid_size * this.style.spacing_multiplier + this.dial_radius + center_coords[0];
         this.center_y = grid_size * this.style.spacing_multiplier + this.dial_radius + center_coords[1];
         this.center = new Point(this.center_x, this.center_y);
@@ -59,28 +61,32 @@ export class SingleDial {
         this.group = new Group();
         this.width = 0;
         this.height = 0;
+        this.group.position = new Point(0, 0);
+
+        this.draw(this.color)
     };
 
     draw(color) {
         this.drawBorder();
         this.drawIndicator(color);
         if (this.style.highlights) {
-            this.drawHighlights(color)
-        }
+            this.drawHighlights(color);
+        };
         this.drawMarkings();
-        this.width = this.group.bounds.width
+        this.width = this.group.bounds.width;;
         this.height = this.group.bounds.height
+        this.position = this.group.position;
     };
 
     drawBorder() {
         var dialBorder = new Path.Circle(this.center, this.dial_radius);
-        strokePath(dialBorder)
-        this.group.addChild(dialBorder)
+        strokePath(dialBorder);
+        this.group.addChild(dialBorder);
 
         if (this.style.inner_border) {
             var innerDialBorder = new Path.Circle(this.center, this.inner_border_radius);
-            strokePath(innerDialBorder)
-            this.group.addChild(innerDialBorder)
+            strokePath(innerDialBorder);
+            this.group.addChild(innerDialBorder);
         };
     };
 
@@ -134,7 +140,7 @@ export class SingleDial {
 
     drawMarkings() {
         var first_marking;
-        var marking_length = decimalPoint(this.spacing / getRandomInt(3, 4), 1);
+        var marking_length = decimalPoint(this.dial_spacing / getRandomInt(3, 4), 1);
         first_marking = new Path();
         first_marking.add(
             this.center,

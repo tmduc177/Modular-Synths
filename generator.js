@@ -1,6 +1,7 @@
 const { Rectangle, Point, Path } = paper;
-import { defineSynthSize } from "./synth-container.js";
-import { SingleDial } from "./dials_generator.js";
+import { defineSynthSize } from "./components/synth-container.js";
+import { SingleDial } from "./components/dials.js";
+import { SingleSlider } from "./components/sliders.js";
 
 var bottom_canvas_height = window.innerHeight;
 var bottom_canvas_width = window.innerWidth;
@@ -37,5 +38,7 @@ window.onload = function() {
     synth_container_path.strokeColor = defaultStrokeColor;
 
     var newDial = new SingleDial(grid_size);
-    newDial.draw(defaultStrokeColor)
+    var newSlider = new SingleSlider(grid_size)
+    newSlider.listAttributes()
+    // newDial.draw(defaultStrokeColor)
 }
