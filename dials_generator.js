@@ -1,10 +1,10 @@
-const { Point, Path } = paper;
+const { Point, Path, Group } = paper;
 import { decimalPoint, getRandomElement, getRandomInt, strokePath } from "./helper-funcs.js";
 
 const dials = {
     "spacing_multiplier": [2, 3, 4],
     "size_multiplier": [2, 3, 4, 5, 6, 8],
-    "indicator_shape": ["circle", "triangle", "rectangle", "diamond"],  
+    "indicator_shape": ["circle", "triangle", "diamond", "line"],  
     "markings_distance_multiplier": [1.4],
     "markings_highlight": ["circle", "triangle", "rectangle", "perpendicular_line"],
     "highlights_style" : ["circle", "triangle", "diamond", "rectangle"],
@@ -44,18 +44,21 @@ export class SingleDial {
             markings_quantity: highlights_quantity * getRandomInt(2,4),
         };
         
-        this.radius = (this.style.size * grid_size) / 2;
-        this.inner_border_radius = this.inner_border ? 0 : this.radius * 0.8;
+        this.dial_radius = (this.style.size * grid_size) / 2;
+        this.inner_border_radius = this.inner_border ? 0 : this.dial_radius * 0.8;
         this.spacing = this.style.spacing_multiplier * this.grid_size
-        this.full_radius = this.radius + this.spacing
+        this.full_radius = this.dial_radius + this.spacing
 
-        // this.center_coords = grid_size * this.style.spacing_multiplier + this.radius;
-        this.center_x = grid_size * this.style.spacing_multiplier + this.radius + center_coords[0];
-        this.center_y = grid_size * this.style.spacing_multiplier + this.radius + center_coords[1];
+        // this.center_coords = grid_size * this.style.spacing_multiplier + this.dial_radius;
+        this.center_x = grid_size * this.style.spacing_multiplier + this.dial_radius + center_coords[0];
+        this.center_y = grid_size * this.style.spacing_multiplier + this.dial_radius + center_coords[1];
         this.center = new Point(this.center_x, this.center_y);
-        this.indicator = false;
         this.starting_angle = this.style.turn_limit ? -135 : 180;
         this.available_angle =  this.style.turn_limit ? 270 : 360; 
+
+        this.group = new Group();
+        this.width = 0;
+        this.height = 0;
     };
 
     draw(color) {
@@ -65,62 +68,68 @@ export class SingleDial {
             this.drawHighlights(color)
         }
         this.drawMarkings();
+        this.width = this.group.bounds.width
+        this.height = this.group.bounds.height
     };
 
     drawBorder() {
-        var dialBorder = new Path.Circle(this.center, this.radius);
+        var dialBorder = new Path.Circle(this.center, this.dial_radius);
         strokePath(dialBorder)
+        this.group.addChild(dialBorder)
 
         if (this.style.inner_border) {
             var innerDialBorder = new Path.Circle(this.center, this.inner_border_radius);
             strokePath(innerDialBorder)
+            this.group.addChild(innerDialBorder)
         };
     };
 
     drawIndicator(color) {
+        var indicator;
         var indicator_radius;
         var center_offset = 0;
         switch (this.style.indicator_shape) {
             case "triangle":
-                indicator_radius = this.radius >= 20 ? 10 : this.radius / getRandomInt(2,3);
-                this.indicator = new Path.RegularPolygon(this.center, 3, indicator_radius);
-                center_offset = (0.8 * this.radius) - indicator_radius;
+                indicator_radius = this.dial_radius >= 20 ? 10 : this.dial_radius / getRandomInt(2,3);
+                indicator = new Path.RegularPolygon(this.center, 3, indicator_radius);
+                center_offset = (0.8 * this.dial_radius) - indicator_radius;
                 break;
             case "rectangle":
-                var rectangle_height = getRandomInt(2,3) * this.radius / 4;
-                var rectangle_width = this.radius / 5;
-                this.indicator = new Path.Rectangle(
+                var rectangle_height = getRandomInt(2,3) * this.dial_radius / 4;
+                var rectangle_width = this.dial_radius / 5;
+                indicator = new Path.Rectangle(
                     new Point(this.center_x - rectangle_width / 2, this.center_y - rectangle_height / 2),
                     new Point(this.center_x + rectangle_width / 2, this.center_y + rectangle_height / 2)
                 );
-                center_offset = (0.75 * this.radius) - (rectangle_height / 2);
+                center_offset = (0.75 * this.dial_radius) - (rectangle_height / 2);
                 break;
             case "diamond":
-                indicator_radius = decimalPoint(this.grid_size / getRandomInt(2, 3));
-                this.indicator = new Path.RegularPolygon(this.center, 4, indicator_radius);
-                this.indicator.rotate(45);
-                center_offset = this.radius * 0.5;
+                indicator_radius = decimalPoint(this.grid_size / getRandomInt(2, 3), 1);
+                indicator = new Path.RegularPolygon(this.center, 4, indicator_radius);
+                indicator.rotate(45);
+                center_offset = (this.dial_radius * 0.5) - indicator_radius;
                 break;
-            // line is buggy, sometimes it appears and sometimes it doesnt, havent figured out why
-            // case "line":
-            //     indicator_radius = this.radius / 4
-            //     this.indicator = new Path();
-            //     this.indicator.add(this.center);
-            //     this.indicator.add(new Point(this.center_coords, this.center_coords - (indicator_radius * 4)));
-            //     break;
+            case "line":
+                var indicator_length = ((this.dial_radius * 0.8) / 5) * getRandomInt(1, 5)
+                indicator = new Path()
+                indicator.add(this.center);
+                indicator.add(new Point(this.center_x, (this.center_y - indicator_length)))
+                center_offset = this.dial_radius * 0.8 - indicator_length
+                break;
             default:
                 indicator_radius = decimalPoint(this.grid_size / getRandomInt(3, 5), 1)
-                this.indicator = new Path.Circle(this.center, indicator_radius);
-                center_offset = this.radius * 0.5;
+                indicator = new Path.Circle(this.center, indicator_radius);
+                center_offset = this.dial_radius * 0.5;
                 break;
         };
         
-        this.indicator.position.y -= center_offset;
+        indicator.position.y -= center_offset;
 
-        if (this.style.indicator_fill) {
-            this.indicator.fillColor = color;
+        if (this.style.indicator_fill && this.style.indicator_shape != "line") {
+            indicator.fillColor = color;
         };
-        strokePath(this.indicator)
+        strokePath(indicator)
+        this.group.addChild(indicator)
     };
 
     drawMarkings() {
@@ -132,7 +141,7 @@ export class SingleDial {
             new Point(this.center_x, this.center_y - marking_length)
         );
         var random_multiplier = getRandomInt(1, 3) / 2
-        first_marking.position.y -= (this.radius + (marking_length * random_multiplier));
+        first_marking.position.y -= (this.dial_radius + (marking_length * random_multiplier));
         first_marking.rotate(this.starting_angle, this.center);
 
         for(var i = 0; i <= this.style.markings_quantity; i++) {
@@ -146,10 +155,12 @@ export class SingleDial {
                     strokePath(cloned_marking)
                 };
             };
+            this.group.addChild(cloned_marking)
         };
 
         if (!this.style.highlights) {
             strokePath(first_marking)
+            this.group.addChild(first_marking)
         };
     };
 
@@ -186,7 +197,7 @@ export class SingleDial {
             highlight_radius = highlight_radius * length_multiplier
         }
 
-        first_highlight.position.y -= shiftY(this.full_radius, this.radius, highlight_radius)
+        first_highlight.position.y -= shiftY(this.full_radius, this.dial_radius, highlight_radius)
         first_highlight.rotate(this.starting_angle, this.center)
 
         if (this.style.highlights_fill) {
@@ -195,9 +206,12 @@ export class SingleDial {
             strokePath(first_highlight)
         };
 
+        this.group.addChild(first_highlight)
+
         for (var i = 0; i <= this.style.highlights_quantity; i++) {
             var cloned_highlight = first_highlight.clone();
             cloned_highlight.rotate(i * (this.available_angle / this.style.highlights_quantity), this.center)
+            this.group.addChild(cloned_highlight)
         }
     };
 };

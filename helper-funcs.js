@@ -10,7 +10,7 @@ export function decimalPoint(number ,decimal_point) {
     return Math.floor(number * (10 ** decimal_point)) / (10 ** decimal_point)
 }
 
-export function strokePath(path, stroke_width = 2, stroke_color = "white") {
-    path.strokeWidth = stroke_width
-    path.strokeColor = stroke_color
+export function strokePath(vector_object, stroke_width = 2, stroke_color = "white") {
+    vector_object.strokeWidth = stroke_width
+    vector_object.strokeColor = stroke_color
 }
