@@ -38,6 +38,4 @@ window.onload = function() {
     synth_container_path.strokeColor = defaultStrokeColor;
 
     var newDial = new Dial({origin_x: 100, origin_y: 100})
-    newDial.listAttributes()
-    newDial.draw()
 }

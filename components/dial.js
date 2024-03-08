@@ -1,5 +1,6 @@
 const { Point, Path, Group } = paper;
 import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice } from "./helper-funcs.js";
+import { Jack } from "./jack.js";
 
 const default_grid_size = 10
 
@@ -20,7 +21,9 @@ export class Dial {
         padding_top = default_grid_size,
         padding_bottom = default_grid_size,
         padding_left = default_grid_size,
-        padding_right = default_grid_size
+        padding_right = default_grid_size,
+        has_jack = binaryChoice(0.5, true, false),
+        jack_edges = binaryChoice(0.5, 0, 6)
     }) {
         this.grid_size = grid_size;
         this.origin_point = new Point(origin_x, origin_y)
@@ -63,12 +66,18 @@ export class Dial {
         } else {
             this.distance_from_center += this.marking_size / 2 + this.distance_from_dial
         }
+        this.has_jack = has_jack;
+        if (this.has_jack) {
+            this.jack_edges = jack_edges;
+        }
         this.padding_top = padding_top;
         this.padding_bottom = padding_bottom;
         this.padding_left = padding_left;
         this.padding_right = padding_right;
         this.group = new Group()
-        };
+
+        this.draw()
+    };
 
     listAttributes() {
         console.log(this);
@@ -77,6 +86,9 @@ export class Dial {
     draw() {
         this.drawDial();
         this.drawAllMarkings();
+        if (this.has_jack) {
+            this.drawJack();
+        };
     };
 
     drawDial() {
@@ -159,7 +171,8 @@ export class Dial {
         
 
         if (this.highlight_quantity) {
-            var highlight_step = this.rotation_arc / (this.highlight_quantity - 1);
+            var highlight_segments = this.highlight_quantity - 1;
+            var highlight_step = this.rotation_arc / highlight_segments;
             var highlight_stretch = getRandomInt(Math.floor(this.highlight_size), this.distance_from_dial) / Math.floor(this.highlight_size)
             if (this.highlight_edges) {
                 first_highlight = new Path.RegularPolygon(this.origin_point, this.highlight_edges, this.highlight_size / 2);
@@ -183,26 +196,31 @@ export class Dial {
         };
 
         if (this.marking_quantity) {
-            var marking_step = this.rotation_arc / (this.marking_quantity - 1);
-            first_marking = new Path()
-            first_marking.add(this.origin_point)
-            first_marking.add(this.origin_point.x, this.origin_point.y - this.marking_size)
-            console.log(first_marking)
+            var marking_segments = this.marking_quantity - 1
+            var marking_step = this.rotation_arc / marking_segments;
+            first_marking = new Path();
+            first_marking.add(this.origin_point);
+            first_marking.add(this.origin_point.x, this.origin_point.y - this.marking_size);
             first_marking.position.y -= this.distance_from_center;
-            first_marking.rotate(this.start_angle, this.origin_point)
+            first_marking.rotate(this.start_angle, this.origin_point);
             for (var i = 1; i < this.marking_quantity; i++) {
                 var cloned_marking = first_marking.clone();
                 cloned_marking.rotate(i * marking_step, this.origin_point);
-                // Very hard to read:
-                if (!this.highlight_quantity || (i % ((this.marking_quantity - 1) / (this.highlight_quantity - 1)) != 0)) {
-                    strokePath(cloned_marking)
-                    this.group.addChild(cloned_marking)
-                }
+                if (!this.highlight_quantity || (i % (marking_segments / highlight_segments) != 0)) {
+                    strokePath(cloned_marking);
+                    this.group.addChild(cloned_marking);
+                };
             };
             if (!this.highlight_quantity) {
-                strokePath(first_marking)
-                this.group.addChild(first_marking)
-            }
+                strokePath(first_marking);
+                this.group.addChild(first_marking);
+            };
         };
     };
+
+    drawJack() {
+        var jack_center_x = this.group.position.x;
+        var jack_center_y = this.group.position.y + (this.group.bounds.height / 2) + this.grid_size * 4.5
+        var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges})
+    }
 };
