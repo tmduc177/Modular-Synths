@@ -10,7 +10,12 @@ export function decimalPoint(number ,decimal_point) {
     return Math.floor(number * (10 ** decimal_point)) / (10 ** decimal_point)
 }
 
-export function strokePath(vector_object, stroke_width = 2, stroke_color = "white") {
+export function strokePath(vector_object, options = {}) {
+    const { stroke_width = 2, stroke_color = "white" } = options;
     vector_object.strokeWidth = stroke_width
     vector_object.strokeColor = stroke_color
+}
+
+export function binaryChoice(choice_1_chance, choice_1, choice_2) {
+    return Math.random() < choice_1_chance ? choice_1 : choice_2
 }

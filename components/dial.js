@@ -1,1 +1,208 @@
-        function drawHighlight({
+const { Point, Path, Group } = paper;
+import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice } from "./helper-funcs.js";
+
+const default_grid_size = 10
+
+export class Dial {
+    constructor({
+        grid_size = default_grid_size,
+        origin_x = 0,
+        origin_y = 0,
+        color = 'white',
+        dial_radius = default_grid_size * getRandomElement([1.5, 2, 2.5, 3, 4]),
+        dial_is_grooved = binaryChoice(0.5, true, false),
+        outer_ring_size = default_grid_size * getRandomElement([0, 0.25, 0.3, 0.5]),
+        start_angle = -135,
+        rotation_arc = 270,
+        indicator_edges = getRandomElement([0, 1, 3, 4]),
+        highlight_quantity = getRandomElement([0, 2, 3, 4, 5, 6]),
+        highlight_edges = getRandomElement([0, 3, 4]),
+        padding_top = default_grid_size,
+        padding_bottom = default_grid_size,
+        padding_left = default_grid_size,
+        padding_right = default_grid_size
+    }) {
+        this.grid_size = grid_size;
+        this.origin_point = new Point(origin_x, origin_y)
+        this.color = color;
+        this.dial_radius = dial_radius;
+        this.dial_is_grooved = dial_is_grooved;
+        if (outer_ring_size) {
+            this.outer_ring_radius = outer_ring_size + dial_radius
+        };
+        this.start_angle = start_angle;
+        this.rotation_arc = rotation_arc;
+        this.indicator_edges = indicator_edges;
+        this.indicator_is_filled = binaryChoice(0.5, true, false);
+        this.indicator_size = dial_radius / getRandomElement([1, 1.5, 2, 3]);
+        this.highlight_quantity = highlight_quantity;
+        if (this.highlight_quantity) {
+            this.highlight_edges = highlight_edges;
+            this.highlight_size = this.grid_size * getRandomElement([0.5, 0.75, 1]);
+            this.highlight_is_filled = binaryChoice(0.5, true, false);
+        }
+        function getMarkingQuantity(hq) {
+            var mq = getRandomInt(3,20)
+            if (hq) {
+                mq = binaryChoice(
+                    0.5,
+                    0,
+                    hq + ((hq - 1) * getRandomInt(1, 4))
+                )
+            };
+            return mq;
+        };
+        this.marking_quantity = getMarkingQuantity(this.highlight_quantity);
+        if (this.marking_quantity) {
+            this.marking_size = Math.floor(this.grid_size / getRandomElement([1, 1.5, 2, 2.5, 4,]));
+        };
+        this.distance_from_dial = getRandomInt(this.grid_size, (this.grid_size * 3)) ;
+        this.distance_from_center = this.outer_ring_size ? this.outer_ring_radius : this.dial_radius;
+        if (this.highlight_size) {
+            this.distance_from_center += this.highlight_size / 2 + this.distance_from_dial
+        } else {
+            this.distance_from_center += this.marking_size / 2 + this.distance_from_dial
+        }
+        this.padding_top = padding_top;
+        this.padding_bottom = padding_bottom;
+        this.padding_left = padding_left;
+        this.padding_right = padding_right;
+        this.group = new Group()
+        };
+
+    listAttributes() {
+        console.log(this);
+    };
+
+    draw() {
+        this.drawDial();
+        this.drawAllMarkings();
+    };
+
+    drawDial() {
+        // Knob
+        var knob = new Path.Circle(this.origin_point, this.dial_radius);
+        if (this.dial_is_grooved) {
+            var first_groove = new Path.Circle(this.origin_point, this.dial_radius * 0.75);
+            // it seems that paper struggles with very precise points (very small objects / many places after the decimal points)
+            // if points are too close then the whole thing couldnt render
+            // somehow 23/15 works, although not perfectly, but will have to do for now
+            first_groove.position.y -= decimalPoint((23/15), 2) * this.dial_radius;
+            for (var i = 1; i < 8; i++) {
+                var cloned_groove = first_groove.clone();
+                cloned_groove.rotate(i * (360 / 8), this.origin_point);
+                first_groove = first_groove.unite(cloned_groove);
+            };
+            knob = knob.subtract(first_groove);
+            
+        };
+        var cloned_knob = knob.clone()
+        this.group.addChild(knob)
+
+        strokePath(knob)
+
+        // Outer ring
+        if (this.outer_ring_radius != this.dial_radius); {
+            var outer_ring = new Path.Circle(this.origin_point, this.outer_ring_radius);
+            outer_ring = outer_ring.subtract(knob);
+            outer_ring.fillColor = this.color;
+            this.group.addChild(outer_ring)
+        };
+        
+        // Indicator
+        var indicator;
+        var indicator_radius = this.grid_size * getRandomElement([0.25, 0.3]);
+        var highlight_stretch = getRandomElement([1, 2, 2.5]);
+        switch (this.indicator_edges) {
+            case 0:
+                indicator = new Path.Circle(this.origin_point, indicator_radius);
+                break;
+            case 1:
+                indicator_radius = (this.dial_radius * (1 / getRandomInt(2,4)));
+                indicator = new Path();
+                indicator.add(this.origin_point);
+                indicator.add(this.origin_point.x, this.origin_point.y - (indicator_radius * 2));
+                break;
+            default:
+                indicator = new Path.RegularPolygon(this.origin_point, this.indicator_edges, indicator_radius);
+                var is_diamond = this.indicator_edges == 4 ? binaryChoice(0.5, true, false) : false;
+                if (is_diamond) {
+                    indicator.rotate(45);
+                } else {
+                    indicator.scale(1, highlight_stretch);
+                    indicator_radius = indicator_radius * highlight_stretch;
+                };
+                break;
+        };
+        // This if statement is very dumb but somehow i could not get .intersect or .clipMask to work
+        if (this.indicator_edges == 1) {
+            indicator.position.y -= (this.dial_radius - (indicator_radius * 2));
+            if (this.dial_is_grooved) {
+                indicator.position.y += (this.dial_radius * 4/15);
+            } 
+        } else {
+            indicator.position.y -= Math.abs((this.dial_radius - indicator_radius - this.grid_size));
+        };
+        strokePath(indicator);
+        if (this.indicator_is_filled) {indicator.fillColor = this.color};
+        this.group.addChild(indicator);
+        var dial_rotation_percentage = getRandomInt(0, 100) / 100;
+        this.group.rotate((this.start_angle + (this.rotation_arc * dial_rotation_percentage)), this.origin_point);
+    };
+
+    drawAllMarkings() {
+        var first_highlight;
+        var first_marking;
+
+        console.log(this.highlight_quantity)
+        console.log(this.marking_quantity)
+        
+
+        if (this.highlight_quantity) {
+            var highlight_step = this.rotation_arc / (this.highlight_quantity - 1);
+            var highlight_stretch = getRandomInt(Math.floor(this.highlight_size), this.distance_from_dial) / Math.floor(this.highlight_size)
+            if (this.highlight_edges) {
+                first_highlight = new Path.RegularPolygon(this.origin_point, this.highlight_edges, this.highlight_size / 2);
+            } else {
+                first_highlight = new Path.Circle(this.origin_point, this.highlight_size / 2);
+            };
+            if (this.highlight_edges >= 3) {
+                first_highlight.rotate(180);
+                first_highlight.scale(1, highlight_stretch);
+            }
+            first_highlight.position.y -= this.distance_from_center;
+            first_highlight.rotate(this.start_angle, this.origin_point);
+            strokePath(first_highlight);
+            if (this.highlight_is_filled) {first_highlight.fillColor = this.color};
+            this.group.addChild(first_highlight);
+            for (var i = 1; i < this.highlight_quantity; i++) {
+                var cloned_highlight = first_highlight.clone();
+                cloned_highlight.rotate(i * highlight_step, this.origin_point);
+                this.group.addChild(cloned_highlight);
+            };
+        };
+
+        if (this.marking_quantity) {
+            var marking_step = this.rotation_arc / (this.marking_quantity - 1);
+            first_marking = new Path()
+            first_marking.add(this.origin_point)
+            first_marking.add(this.origin_point.x, this.origin_point.y - this.marking_size)
+            console.log(first_marking)
+            first_marking.position.y -= this.distance_from_center;
+            first_marking.rotate(this.start_angle, this.origin_point)
+            for (var i = 1; i < this.marking_quantity; i++) {
+                var cloned_marking = first_marking.clone();
+                cloned_marking.rotate(i * marking_step, this.origin_point);
+                // Very hard to read:
+                if (!this.highlight_quantity || (i % ((this.marking_quantity - 1) / (this.highlight_quantity - 1)) != 0)) {
+                    strokePath(cloned_marking)
+                    this.group.addChild(cloned_marking)
+                }
+            };
+            if (!this.highlight_quantity) {
+                strokePath(first_marking)
+                this.group.addChild(first_marking)
+            }
+        };
+    };
+};
