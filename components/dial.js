@@ -46,13 +46,7 @@ export class Dial {
         }
         function getMarkingQuantity(hq) {
             var mq = getRandomInt(3,20)
-            if (hq) {
-                mq = binaryChoice(
-                    0.5,
-                    0,
-                    hq + ((hq - 1) * getRandomInt(1, 4))
-                )
-            };
+            if (hq) {mq = binaryChoice(0.5, 0, hq + ((hq - 1) * getRandomInt(1, 4)))};
             return mq;
         };
         this.marking_quantity = getMarkingQuantity(this.highlight_quantity);
@@ -99,6 +93,7 @@ export class Dial {
             // it seems that paper struggles with very precise points (very small objects / many places after the decimal points)
             // if points are too close then the whole thing couldnt render
             // somehow 23/15 works, although not perfectly, but will have to do for now
+            // 23/15 only works for desktop
             first_groove.position.y -= decimalPoint((23/15), 2) * this.dial_radius;
             for (var i = 1; i < 8; i++) {
                 var cloned_groove = first_groove.clone();
@@ -165,10 +160,6 @@ export class Dial {
     drawAllMarkings() {
         var first_highlight;
         var first_marking;
-
-        console.log(this.highlight_quantity)
-        console.log(this.marking_quantity)
-        
 
         if (this.highlight_quantity) {
             var highlight_segments = this.highlight_quantity - 1;
