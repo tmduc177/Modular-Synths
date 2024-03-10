@@ -33,10 +33,10 @@ window.onload = function() {
     // myPath.add(new Point(100, 50));
 
     var synth_size = defineSynthSize(drawable_canvas_width, drawable_canvas_height, grid_size);
-    var synth_container = new Rectangle(new Point(1,1), new Point(synth_size.w - 1, synth_size.h - 1));
-    var synth_container_path = new Path.Rectangle(synth_container)
-    synth_container_path.strokeColor = defaultStrokeColor;
+    // var synth_container = new Rectangle(new Point(1,1), new Point(synth_size.w - 1, synth_size.h - 1));
+    // // var synth_container_path = new Path.Rectangle(synth_container)
+    // // synth_container_path.strokeColor = defaultStrokeColor;
 
     var newDial = new Dial({origin_x: 100, origin_y: 100});
-    var newSlider = new Slider({origin_x: 300, origin_y: 100});
+    var newSlider = new Slider({origin_x: 600, origin_y: 160, has_jack: true});
 }
