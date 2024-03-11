@@ -1,7 +1,7 @@
 const { Point, Path, Group } = paper;
 import { BaseComponent } from "./base-component.js";
 import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice } from "./helper-funcs.js";
-import { Jack } from "./jack.js";
+import { Jack, StatusLight } from "./small-components.js";
 
 const default_grid_size = 10
 
@@ -25,7 +25,9 @@ export class Dial extends BaseComponent {
         marking_size_factor = getRandomElement([1, 1.5, 2, 2.5, 4]),
         distance_from_dial_factor = 3,
         has_jack = binaryChoice(0.5, true, false),
-        jack_edges = getRandomElement([0, 6])
+        jack_edges = getRandomElement([0, 6]),
+        has_light = binaryChoice(0.5, true, false),
+        light_edges = binaryChoice(0.5, 0, 4)
     }) {
         super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
         this.dial_radius = dial_radius_factor * this.grid_size;
@@ -59,10 +61,14 @@ export class Dial extends BaseComponent {
             this.distance_from_center += this.highlight_size / 2 + this.distance_from_dial
         } else {
             this.distance_from_center += this.marking_size / 2 + this.distance_from_dial
-        }
+        };
         this.has_jack = has_jack;
         if (this.has_jack) {
             this.jack_edges = jack_edges;
+        };
+        this.has_light = has_light;
+        if (this.has_light) {
+            this.light_edges = light_edges;
         }
 
         this.draw()
@@ -77,6 +83,9 @@ export class Dial extends BaseComponent {
         this.drawAllMarkings();
         if (this.has_jack) {
             this.drawJack();
+        };
+        if (this.has_light) {
+            this.drawLight();
         };
     };
 
@@ -208,4 +217,11 @@ export class Dial extends BaseComponent {
         var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges})
         this.group.addChild(jack.group)
     }
+
+    drawLight() {
+        var light_center_x = this.group.position.x;
+        var light_center_y = this.group.position.y - (this.group.bounds.height / 2) - (this.grid_size * 4.5);
+        var light = new StatusLight({origin_x: light_center_x, origin_y: light_center_y, edges: this.light_edges})
+        this.group.addChild(light.group)
+    };
 };

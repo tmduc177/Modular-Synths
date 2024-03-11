@@ -1,33 +1,33 @@
-const { Path, Point, Group, Size } = paper
+const { Path, Point, Group } = paper
+import { BaseComponent } from "./base-component.js";
 import { binaryChoice, decimalPoint, getRandomElement, getRandomInt, strokePath } from "./helper-funcs.js";
-import { Jack } from "./jack.js";
+import { Jack, StatusLight } from "./small-components.js";
 
 var default_grid_size = 10
 var default_color = 'white'
 
-export class Slider {
+export class Slider extends BaseComponent{
     constructor({
-        grid_size = default_grid_size,
-        color = default_color,
-        origin_x = 0,
-        origin_y = 0,
+        grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
+        type = 'Slider',
         is_horizontal = binaryChoice(0.2, true, false),
         knob_edges = getRandomElement([0, 4]),
         knob_h_factor = getRandomElement([1, 1.5, 2, 3, 4]),
         knob_w_factor = getRandomElement([1.5, 2, 2.5, 3, 4]),
         knob_radius_factor = getRandomElement([1, 1.5, 2]),
         indicator_is_disconnected = binaryChoice(0.5, true, false),
+        indicator_gap_factor = getRandomElement([0.25, 0.5]),
         track_length_factor = getRandomInt(15, 30),
         track_rounded_corners = binaryChoice(0.5, true, false),
         track_is_filled = binaryChoice(0.5, true, false),
         highlight_quantity = getRandomInt(0,5),
-        has_light = binaryChoice(0.5, true, false),
+        marking_quantity_factor = getRandomInt(4,20),
         has_jack = binaryChoice(0.5, true, false),
-        jack_edges = binaryChoice(0.5, 0, 6)
+        jack_edges = binaryChoice(0.5, 0, 6),
+        has_light = binaryChoice(0.5, true, false),
+        light_edges = binaryChoice(0.5, 0, 4)
     }) {
-        this.grid_size = grid_size;
-        this.color = color;
-        this.origin_point = new Point(origin_x, origin_y)
+        super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
         this.is_horizontal = is_horizontal;
         this.knob_edges = knob_edges;
         if (this.knob_edges) {
@@ -50,30 +50,28 @@ export class Slider {
             this.knob_radius = knob_radius_factor * this.grid_size
         }
         this.indicator_is_disconnected = indicator_is_disconnected;
-        if (this.indicator_is_disconnected) {this.indicator_gap_factor = getRandomElement([0.25, 0.5])}
+        if (this.indicator_is_disconnected) {
+            this.indicator_gap_factor = indicator_gap_factor
+        }
         this.track_length = this.grid_size * track_length_factor;
         this.track_rounded_corners = track_rounded_corners;
         this.track_is_filled = track_is_filled;
         this.highlight_quantity = highlight_quantity;
         this.highlight_width = this.grid_size * 2;
         function getMarkingQuantity(hq) {
-            var mq = getRandomInt(5, 20);
-            if (hq > 1) {mq = binaryChoice(0.5, 0, hq + ((hq - 1) * getRandomInt(1,5)))};
+            var mq = marking_quantity_factor;
+            if (hq > 1) {mq = binaryChoice(0.5, 0, hq + ((hq - 1) * Math.round(marking_quantity_factor / 4)))};
             return mq;
         };
         this.marking_quantity = getMarkingQuantity(highlight_quantity);
         this.marking_width = this.grid_size;
-        this.has_light = has_light
-        this.light_position = this.is_horizontal ? getRandomElement([0, 180]) : getRandomElement([-90, 90])
-        this.light_is_round = this.is_horizontal ? true : binaryChoice(0.5, true, false)
-        this.has_jack = has_jack
+        this.has_light = has_light;
+        if (this.has_light) {
+            this.light_edges = light_edges
+        };
+        this.has_jack = has_jack;
         if (this.has_jack) {
             this.jack_edges = jack_edges
-            if (this.is_horizontal) {
-                this.jack_position = getRandomElement(['left', 'right']);
-            } else {
-                this.jack_position = getRandomElement(['top', 'bottom']);
-            }
         }
         this.group = new Group();
 
@@ -85,7 +83,6 @@ export class Slider {
     }
 
     draw() {
-        // this.listAttributes()
         this.drawKTM()
         if (this.has_light) {
             this.drawLight()
@@ -93,6 +90,7 @@ export class Slider {
         if (this.has_jack) {
             this.drawJack()
         }
+        
     }
 
     drawKTM() {
@@ -227,14 +225,18 @@ export class Slider {
         markings.addChild(right_markings);
         return markings;
     };
-
+    
     drawLight() {
-
+        var light_center_x = this.group.position.x;
+        var light_center_y = this.group.position.y - (this.group.bounds.height / 2) - (this.grid_size * 4.5);
+        var light = new StatusLight({origin_x: light_center_x, origin_y: light_center_y, edges: this.light_edges})
+        this.group.addChild(light.group)
     };
 
     drawJack() {
         var jack_center_x = this.group.position.x;
-        var jack_center_y = this.group.position.y + (this.group.bounds.height / 2) + this.grid_size * 4.5
+        var jack_center_y = this.group.position.y + (this.group.bounds.height / 2) + (this.grid_size * 4.5)
         var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges})
+        this.group.addChild(jack.group)
     };
 };
