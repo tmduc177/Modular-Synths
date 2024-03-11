@@ -1,60 +1,60 @@
 const { Point, Path, Group } = paper;
+import { BaseComponent } from "./base-component.js";
 import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice } from "./helper-funcs.js";
 import { Jack } from "./jack.js";
 
 const default_grid_size = 10
 
-export class Dial {
+export class Dial extends BaseComponent {
     constructor({
-        grid_size = default_grid_size,
-        origin_x = 0,
-        origin_y = 0,
-        color = 'white',
-        dial_radius = default_grid_size * getRandomElement([1.5, 2, 2.5, 3, 4]),
+        grid_size, origin_x, origin_y, color, padding_top, padding_bottom, padding_right, padding_left,
+        type = 'Dial',
+        dial_radius_factor = getRandomElement([1.5, 2, 2.5, 3, 4]),
         dial_is_grooved = binaryChoice(0.5, true, false),
-        outer_ring_size = default_grid_size * getRandomElement([0, 0.25, 0.3, 0.5]),
+        outer_ring_size_factor = getRandomElement([0, 0.25, 0.3, 0.5]),
         start_angle = -135,
         rotation_arc = 270,
         indicator_edges = getRandomElement([0, 1, 3, 4]),
+        indicator_is_filled = binaryChoice(0.5, true, false),
+        indicator_size_factor = getRandomElement([1, 1.5, 2, 3]),
         highlight_quantity = getRandomElement([0, 2, 3, 4, 5, 6]),
         highlight_edges = getRandomElement([0, 3, 4]),
-        padding_top = default_grid_size,
-        padding_bottom = default_grid_size,
-        padding_left = default_grid_size,
-        padding_right = default_grid_size,
+        highlight_size_factor = getRandomElement([0.5, 0.75, 1]),
+        hightlight_is_filled = binaryChoice(0.5, true, false),
+        marking_quantity_factor = getRandomInt(5,20),
+        marking_size_factor = getRandomElement([1, 1.5, 2, 2.5, 4]),
+        distance_from_dial_factor = 3,
         has_jack = binaryChoice(0.5, true, false),
-        jack_edges = binaryChoice(0.5, 0, 6)
+        jack_edges = getRandomElement([0, 6])
     }) {
-        this.grid_size = grid_size;
-        this.origin_point = new Point(origin_x, origin_y)
-        this.color = color;
-        this.dial_radius = dial_radius;
+        super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
+        this.dial_radius = dial_radius_factor * this.grid_size;
         this.dial_is_grooved = dial_is_grooved;
-        if (outer_ring_size) {
-            this.outer_ring_radius = outer_ring_size + dial_radius
+        if (outer_ring_size_factor) {
+            this.outer_ring_radius = (outer_ring_size_factor * this.grid_size) + this.dial_radius
         };
         this.start_angle = start_angle;
         this.rotation_arc = rotation_arc;
         this.indicator_edges = indicator_edges;
-        this.indicator_is_filled = binaryChoice(0.5, true, false);
-        this.indicator_size = dial_radius / getRandomElement([1, 1.5, 2, 3]);
+        this.indicator_is_filled = indicator_is_filled;
+        this.indicator_size = this.dial_radius / indicator_size_factor;
         this.highlight_quantity = highlight_quantity;
         if (this.highlight_quantity) {
             this.highlight_edges = highlight_edges;
-            this.highlight_size = this.grid_size * getRandomElement([0.5, 0.75, 1]);
-            this.highlight_is_filled = binaryChoice(0.5, true, false);
+            this.highlight_size = this.grid_size * highlight_size_factor;
+            this.highlight_is_filled = hightlight_is_filled;
         }
         function getMarkingQuantity(hq) {
-            var mq = getRandomInt(3,20)
-            if (hq) {mq = binaryChoice(0.5, 0, hq + ((hq - 1) * getRandomInt(1, 4)))};
+            var mq = marking_quantity_factor
+            if (hq) {mq = binaryChoice(0.5, 0, hq + ((hq - 1) * Math.round(marking_quantity_factor / 5)))};
             return mq;
         };
         this.marking_quantity = getMarkingQuantity(this.highlight_quantity);
         if (this.marking_quantity) {
-            this.marking_size = Math.floor(this.grid_size / getRandomElement([1, 1.5, 2, 2.5, 4,]));
+            this.marking_size = Math.floor(this.grid_size / marking_size_factor);
         };
-        this.distance_from_dial = getRandomInt(this.grid_size, (this.grid_size * 3)) ;
-        this.distance_from_center = this.outer_ring_size ? this.outer_ring_radius : this.dial_radius;
+        this.distance_from_dial = getRandomInt(this.grid_size, (this.grid_size * distance_from_dial_factor));
+        this.distance_from_center = outer_ring_size_factor ? this.outer_ring_radius : this.dial_radius;
         if (this.highlight_size) {
             this.distance_from_center += this.highlight_size / 2 + this.distance_from_dial
         } else {
@@ -64,11 +64,6 @@ export class Dial {
         if (this.has_jack) {
             this.jack_edges = jack_edges;
         }
-        this.padding_top = padding_top;
-        this.padding_bottom = padding_bottom;
-        this.padding_left = padding_left;
-        this.padding_right = padding_right;
-        this.group = new Group()
 
         this.draw()
     };
@@ -89,24 +84,22 @@ export class Dial {
         // Knob
         var knob = new Path.Circle(this.origin_point, this.dial_radius);
         if (this.dial_is_grooved) {
-            var first_groove = new Path.Circle(this.origin_point, this.dial_radius * 0.75);
+            var base_groove = new Path.Circle(this.origin_point, this.dial_radius * 0.75);
             // it seems that paper struggles with very precise points (very small objects / many places after the decimal points)
             // if points are too close then the whole thing couldnt render
             // somehow 23/15 works, although not perfectly, but will have to do for now
             // 23/15 only works for desktop
-            first_groove.position.y -= decimalPoint((23/15), 2) * this.dial_radius;
+            base_groove.position.y -= decimalPoint((23/15), 2) * this.dial_radius;
+            var first_groove = base_groove.clone()
             for (var i = 1; i < 8; i++) {
                 var cloned_groove = first_groove.clone();
                 cloned_groove.rotate(i * (360 / 8), this.origin_point);
-                first_groove = first_groove.unite(cloned_groove);
+                base_groove = base_groove.unite(cloned_groove)
             };
-            knob = knob.subtract(first_groove);
-            
+            knob = knob.subtract(base_groove)
         };
-        var cloned_knob = knob.clone()
-        this.group.addChild(knob)
-
         strokePath(knob)
+        this.group.addChild(knob)
 
         // Outer ring
         if (this.outer_ring_radius != this.dial_radius); {
@@ -115,7 +108,7 @@ export class Dial {
             outer_ring.fillColor = this.color;
             this.group.addChild(outer_ring)
         };
-        
+
         // Indicator
         var indicator;
         var indicator_radius = this.grid_size * getRandomElement([0.25, 0.3]);
@@ -146,7 +139,7 @@ export class Dial {
             indicator.position.y -= (this.dial_radius - (indicator_radius * 2));
             if (this.dial_is_grooved) {
                 indicator.position.y += (this.dial_radius * 4/15);
-            } 
+            }
         } else {
             indicator.position.y -= Math.abs((this.dial_radius - indicator_radius - this.grid_size));
         };
@@ -213,5 +206,6 @@ export class Dial {
         var jack_center_x = this.group.position.x;
         var jack_center_y = this.group.position.y + (this.group.bounds.height / 2) + this.grid_size * 4.5
         var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges})
+        this.group.addChild(jack.group)
     }
 };

@@ -1,6 +1,6 @@
 const { Rectangle, Point, Path } = paper;
 import { defineSynthSize } from "./components/synth-container.js";
-import { Slider } from "./components/sliders.js";
+import { Slider } from "./components/slider.js";
 import { Dial } from "./components/dial.js";
 
 var bottom_canvas_height = window.innerHeight;
@@ -37,6 +37,6 @@ window.onload = function() {
     // // var synth_container_path = new Path.Rectangle(synth_container)
     // // synth_container_path.strokeColor = defaultStrokeColor;
 
-    var newDial = new Dial({origin_x: 100, origin_y: 100});
-    var newSlider = new Slider({origin_x: 600, origin_y: 160, has_jack: true});
+    var newDial = new Dial({origin_x: 400, origin_y: 100, has_jack: true, dial_is_grooved: true});
+    var newSlider = new Slider({origin_x: 100, origin_y: 160, has_jack: true});
 }

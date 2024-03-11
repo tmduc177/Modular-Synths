@@ -1,7 +1,11 @@
 - Vary Jack placement for Slider
 - Create Light component
 - Add drawLight() for Dial and Slider
-- Move all property determinants into constructor for components;
-- Add a method that returns all non-dependent properties for components;
-- Modify constructor so that it has the ability to copy non-dependent properties from other components of the same type;
 - Try inheritance, since after adding these methods, components will not only just have some shared properties, but also shared methods;
+    - Made BaseComponent
+- Move all property determinants into constructor for components;
+    - Done for Dial and Jack
+- Add a method that returns all non-dependent properties for components;
+    - Partially done in BaseComponent
+- Modify constructor so that it has the ability to copy non-dependent properties from other components of the same type;
+    - Partialy done in BaseComponent

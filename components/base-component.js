@@ -1,0 +1,57 @@
+const { Path, Point, Group } = paper;
+
+const default_grid_size = 10;
+const default_color = 'white';
+
+export class BaseComponent{
+    constructor({
+        type = 'BaseComponent',
+        grid_size = default_grid_size,
+        color = default_color,
+        origin_x = 0,
+        origin_y = 0,
+        padding_top = 0,
+        padding_bottom = 0,
+        padding_left = 0,
+        padding_right = 0,
+    }) {
+        this.type = type
+        this.grid_size = grid_size;
+        this.color = color;
+        this.origin_point = new Point(origin_x, origin_y);
+        this.padding_top = padding_top
+        this.padding_bottom = padding_bottom
+        this.padding_left = padding_left
+        this.padding_right = padding_right
+        this.group = new Group()
+    };
+
+    logProperties() {
+        console.log(this)
+    };
+
+    draw() {
+
+    }
+
+    getProperties(options = {}) {
+        const {all_properties = true} = options;
+        if (all_properties) {
+            return Object.keys(this).reduce((properties, key) => {
+                properties[keys] = this[key]
+                return properties
+            }, {});
+        } else {
+
+        };
+    };
+
+    setProperties(options = {}) {
+        const {all_properties = true} = options;
+        if (all_properties) {
+
+        } else {
+
+        };
+    };
+};

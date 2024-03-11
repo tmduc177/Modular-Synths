@@ -85,7 +85,7 @@ export class Slider {
     }
 
     draw() {
-        this.listAttributes()
+        // this.listAttributes()
         this.drawKTM()
         if (this.has_light) {
             this.drawLight()
