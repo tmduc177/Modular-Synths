@@ -23,6 +23,7 @@ export class BaseComponent{
         this.padding_bottom = padding_bottom
         this.padding_left = padding_left
         this.padding_right = padding_right
+        this.exclude_props_on_clone = ['type', 'origin_point', 'exclude_props_on_clone']
         this.group = new Group()
     };
 
@@ -31,27 +32,14 @@ export class BaseComponent{
     };
 
     draw() {
-
     }
 
-    getProperties(options = {}) {
-        const {all_properties = true} = options;
-        if (all_properties) {
-            return Object.keys(this).reduce((properties, key) => {
-                properties[keys] = this[key]
-                return properties
-            }, {});
-        } else {
-
-        };
-    };
-
-    setProperties(options = {}) {
-        const {all_properties = true} = options;
-        if (all_properties) {
-
-        } else {
-
-        };
+    cloneDeterminants() {
+        return Object.keys(this).reduce((properties, key) => {
+            if (!this.exclude_props_on_clone.includes(key)) {
+                properties[key] = this[key];
+            }
+            return properties;
+        }, {});
     };
 };

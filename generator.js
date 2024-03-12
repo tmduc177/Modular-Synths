@@ -40,4 +40,8 @@ window.onload = function() {
 
     var newDial = new Dial({origin_x: 100, origin_y: 200});
     var newSlider = new Slider({origin_x: 400, origin_y: 200});
+    var cloned_determinants = newDial.cloneDeterminants()
+    cloned_determinants.origin_x = 700
+    cloned_determinants.origin_y = 200
+    var newerDial = new Dial(cloned_determinants)
 }
