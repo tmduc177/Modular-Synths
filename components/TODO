@@ -1,1 +1,0 @@
-- Rework slider.js to have only determinants in the constructor and calculations in the methods

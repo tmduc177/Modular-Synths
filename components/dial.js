@@ -59,7 +59,6 @@ export class Dial extends BaseComponent {
     };
 
     draw() {
-        console.log(this)
         super.draw();
         this.drawKnob();
         this.drawNotches();
