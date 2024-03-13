@@ -3,6 +3,7 @@ import { defineSynthSize } from "./components/synth-container.js";
 import { Slider } from "./components/slider.js";
 import { Dial } from "./components/dial.js";
 import { StatusLight } from "./components/small-components.js";
+import { PadBtn } from "./components/pad-btn.js";
 
 var bottom_canvas_height = window.innerHeight;
 var bottom_canvas_width = window.innerWidth;
@@ -40,12 +41,5 @@ window.onload = function() {
 
     var newDial = new Dial({origin_x: 100, origin_y: 200});
     var newSlider = new Slider({origin_x: 400, origin_y: 200});
-    var cloned_dial_props = newDial.cloneDeterminants()
-    cloned_dial_props.origin_x = 700
-    cloned_dial_props.origin_y = 200
-    var newerDial = new Dial(cloned_dial_props)
-    var cloned_slider_props = newSlider.cloneDeterminants()
-    cloned_slider_props.origin_x = 1000
-    cloned_slider_props.origin_y = 200
-    var newerSlider = new Slider(cloned_slider_props)
+    var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500})
 }

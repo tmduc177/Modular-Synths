@@ -58,7 +58,6 @@ export class Slider extends BaseComponent {
     };
 
     draw() {
-        console.log(this)
         super.draw();
         this.drawKnob();
         var knob_shadow = this.group.children[0].children[0].clone();
