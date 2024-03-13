@@ -8,6 +8,8 @@ export class Toggle extends BaseComponent{
         type = 'Toggle',
         style = getRandomElement([1, 2, 3]),
         is_horizontal = binaryChoice(0.5, true, false),
+        hex_size_factor = 3,
+        hex_selector_size_factor = 1,
         track_w_factor = 2,
         track_h_factor = 4,
         ridges_factor = 6,
@@ -16,6 +18,8 @@ export class Toggle extends BaseComponent{
         /********************************************************************/
         this.style = style;
         this.is_horizontal = is_horizontal;
+        this.hex_size_factor = hex_size_factor;
+        this.hex_selector_size_factor = hex_selector_size_factor;
         this.track_w_factor = track_w_factor;
         this.track_h_factor = track_h_factor;
         this.ridges_factor = ridges_factor;
@@ -69,7 +73,35 @@ export class Toggle extends BaseComponent{
     };
 
     drawToggle2() {
-        
+        var toggle = new Group();
+        var bottom_layer = new Group();
+        var hex_radius = this.hex_factor * this.grid_size;
+        var hex_base = new Path.RegularPolygon(this.origin_point, 6, hex_radius);
+        strokePath(hex_base);
+        hex_base.rotate(30);
+        var inner_base_radius = hex_radius * 0.8;
+        var inner_base = new Path.Circle(this.origin_point, inner_base_radius);
+        strokePath(inner_base);
+        bottom_layer.addChildren([hex_base, inner_base]);
+        selector_radius = hex_radius * 0.4;
+        var selector_group = new Group();
+        var selector = new Path.Circle(this.origin_point, selector_radius);
+        strokePath(selector);
+        var move_choice = binaryChoice(0.5, 1, -1);
+        selector.position.y += move_choice * (hex_radius - selector_radius);
+        var selector_base_length = selector_radius * 1.75;
+        var selector_base = new Path.Line(
+            new Point(this.origin_point.x - (selector_base_length / 2), this.origin_point.y),
+            new Point(this.origin_point.x + (selector_base_length / 2), this.origin_point.y
+        );
+        strokePath(selector_base);
+        var left_diagonal = new Point(selector.bounds.centerLeft, selector_base.bounds.topLeft);
+        strokePath(left_diagonal);
+        var right_diagonal = new Point(selector.bounds.centerRight, selector_base.bounds.topLeft);
+        strokePath(right_diagonal);
+        var diagonals = new Group([left_diagonal, right_diagonal]);
+        diagonal.scale(1, move_choice, this.origin_point);
+        selector_group.addChildren([selector, selector_base, diagonals]);
     };
 
     drawToggle3() {
