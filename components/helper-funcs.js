@@ -1,3 +1,5 @@
+const { Point } = paper;
+
 export function getRandomElement(source_array) {
     return source_array[Math.floor(Math.random() * source_array.length)];
 };
@@ -18,4 +20,12 @@ export function strokePath(vector_object, options = {}) {
 
 export function binaryChoice(choice_1_chance, choice_1, choice_2) {
     return Math.random() < choice_1_chance ? choice_1 : choice_2
+}
+
+export function getTopLeft(w, h, center_point) {
+    return new Point(center_point.x - (w / 2),center_point.y - (h / 2))
+}
+
+export function getBottomRight(w, h, center_point) {
+    return new Point(center_point.x + (w / 2),center_point.y + (h / 2))
 }

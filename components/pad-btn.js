@@ -1,7 +1,6 @@
 const { Path, Point, Group } = paper
 import { BaseComponent } from "./base-component.js";
-import { binaryChoice, decimalPoint, getRandomElement, getRandomInt, strokePath } from "./helper-funcs.js";
-import { Jack, StatusLight } from "./small-components.js";
+import { binaryChoice, strokePath } from "./helper-funcs.js";
 
 export class PadBtn extends BaseComponent {
     constructor({
@@ -23,6 +22,7 @@ export class PadBtn extends BaseComponent {
     };
 
     draw() {
+        super.draw();
         this.drawEdge();
     };
 
@@ -37,7 +37,7 @@ export class PadBtn extends BaseComponent {
         } else {
             if(this.unraised_and_has_light) {
                 var light = this.drawIndicator();
-                light.addChild(light);
+                this.group.addChild(light);
             };
         };
         strokePath(edge);
@@ -70,7 +70,8 @@ export class PadBtn extends BaseComponent {
         raised.addChild(clipping_mask);
         raised.addChild(raised_edge);
         raised.clipped = true;
-        strokePath(raised, {stroke_width: 1})
+        strokePath(raised, {stroke_width: 1});
+        return raised;
     };
 
     drawIndicator() {

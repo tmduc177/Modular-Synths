@@ -4,6 +4,7 @@ import { Slider } from "./components/slider.js";
 import { Dial } from "./components/dial.js";
 import { StatusLight } from "./components/small-components.js";
 import { PadBtn } from "./components/pad-btn.js";
+import { Toggle } from "./components/toggle.js";
 
 var bottom_canvas_height = window.innerHeight;
 var bottom_canvas_width = window.innerWidth;
@@ -41,5 +42,6 @@ window.onload = function() {
 
     var newDial = new Dial({origin_x: 100, origin_y: 200});
     var newSlider = new Slider({origin_x: 400, origin_y: 200});
-    var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500})
+    var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500});
+    var newToggle = new Toggle({origin_x: 400, origin_y: 500, style: 1});
 }
