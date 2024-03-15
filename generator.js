@@ -43,5 +43,5 @@ window.onload = function() {
     var newDial = new Dial({origin_x: 100, origin_y: 200});
     var newSlider = new Slider({origin_x: 400, origin_y: 200});
     var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500});
-    var newToggle = new Toggle({origin_x: 400, origin_y: 500, style: 1});
+    var newToggle = new Toggle({origin_x: 400, origin_y: 500});
 }

@@ -6,7 +6,7 @@ export class PadBtn extends BaseComponent {
     constructor({
         grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
         type = 'PadBtn',
-        length_factor = 3,
+        length_factor = 5,
         is_raised = binaryChoice(0.5, true, false),
         raised_is_circle = binaryChoice(0.5, true, false),
         unraised_and_has_light = binaryChoice(0.5, true, false)
