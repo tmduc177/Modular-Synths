@@ -25,7 +25,8 @@ export class Slider extends BaseComponent {
         has_jack = binaryChoice(0.5, true, false),
         jack_edges = binaryChoice(0.5, 0, 6),
         has_light = binaryChoice(0.5, true, false),
-        light_edges = binaryChoice(0.5, 0, 4)
+        light_edges = binaryChoice(0.5, 0, 4),
+        connection_array
     }) {
         super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
         /********************************************************************/
@@ -48,6 +49,7 @@ export class Slider extends BaseComponent {
         this.light_edges = light_edges;
         this.has_jack = has_jack;
         this.jack_edges = jack_edges;
+        this.connection_array = connection_array;
         /********************************************************************/
         this.track_length = track_length_factor * this.grid_size;
         this.knob_radius = knob_radius_factor * this.grid_size;
@@ -94,7 +96,6 @@ export class Slider extends BaseComponent {
     };
 
     drawKnob() {
-
         var knob = new Group();
         var knob_edge;
         var knob_w = this.knob_w_factor * this.grid_size;
@@ -205,7 +206,7 @@ export class Slider extends BaseComponent {
     drawJack() {
         var jack_center_x = this.group.position.x;
         var jack_center_y = this.group.position.y + (this.group.bounds.height / 2) + (this.grid_size * 4.5)
-        var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges})
+        var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges, connection_array: this.connection_array})
         this.group.addChild(jack.group)
     };
 };

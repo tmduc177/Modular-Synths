@@ -2,9 +2,9 @@ const { Rectangle, Point, Path } = paper;
 import { defineSynthSize } from "./components/synth-container.js";
 import { Slider } from "./components/slider.js";
 import { Dial } from "./components/dial.js";
-import { StatusLight } from "./components/small-components.js";
 import { PadBtn } from "./components/pad-btn.js";
 import { Toggle } from "./components/toggle.js";
+import { ConnectionArray } from "./components/connection-array.js";
 
 var bottom_canvas_height = window.innerHeight;
 var bottom_canvas_width = window.innerWidth;
@@ -40,8 +40,11 @@ window.onload = function() {
     // // var synth_container_path = new Path.Rectangle(synth_container)
     // // synth_container_path.strokeColor = defaultStrokeColor;
 
-    var newDial = new Dial({origin_x: 100, origin_y: 200});
-    var newSlider = new Slider({origin_x: 400, origin_y: 200});
+    var connections = new ConnectionArray()
+    var newDial = new Dial({origin_x: 100, origin_y: 200, has_jack: true, connection_array: connections});
+    var newSlider = new Slider({origin_x: 400, origin_y: 200, has_jack: true, connection_array: connections});
     var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500});
     var newToggle = new Toggle({origin_x: 400, origin_y: 500});
+    connections.connectRandomPair();
+    console.log(connections);
 }

@@ -1,7 +1,7 @@
 const { Path, Point, Group } = paper;
 
-const default_grid_size = 10;
-const default_color = 'white';
+export const default_grid_size = 10;
+export const default_color = 'white';
 
 export class BaseComponent{
     constructor({

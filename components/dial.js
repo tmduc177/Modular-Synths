@@ -27,7 +27,8 @@ export class Dial extends BaseComponent {
         has_jack = binaryChoice(0.5, true, false),
         jack_edges = getRandomElement([0, 6]),
         has_light = binaryChoice(0.5, true, false),
-        light_edges = binaryChoice(0.5, 0, 4)
+        light_edges = binaryChoice(0.5, 0, 4),
+        connection_array
     }) {
         super({grid_size, origin_x, origin_y, color, padding_top, padding_bottom, padding_right, padding_left, type});
         /* ------------------------------------------------------ */
@@ -54,6 +55,7 @@ export class Dial extends BaseComponent {
         this.jack_edges = jack_edges;
         this.has_light = has_light;
         this.light_edges = light_edges;
+        this.connection_array = connection_array;
         /* ------------------------------------------------------ */
         this.draw()
     };
@@ -208,7 +210,7 @@ export class Dial extends BaseComponent {
     drawJack() {
         var jack_center_x = this.group.position.x;
         var jack_center_y = this.group.position.y + (this.group.bounds.height / 2) + this.grid_size * 4.5;
-        var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges});
+        var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges, connection_array: this.connection_array});
         this.group.addChild(jack.group);
     };
 
