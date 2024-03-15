@@ -51,4 +51,13 @@ export class ConnectionArray {
         };
         return jack_index;
     };
+
+    connectRandomMulti(options = {}) {
+        const { pair_quantity = 1} = options;
+        var total_possible_pairs = Math.floor(this.jacks.length / 2);
+        pair_quantity = pair_quantity < total_possible_pairs ? pair_quantity : total_possible_pairs;
+        for (var i = 1; i <= pair_quantity; i++) {
+            this.connectRandomPair();
+        };
+    };
 };
