@@ -18,6 +18,8 @@ export class BaseComponent{
         this.type = type
         this.grid_size = grid_size;
         this.color = color;
+        this.origin_x = origin_x;
+        this.origin_y = origin_y;
         this.origin_point = new Point(origin_x, origin_y);
         this.padding_top = padding_top
         this.padding_bottom = padding_bottom
@@ -28,7 +30,7 @@ export class BaseComponent{
     };
 
     logProperties() {
-        console.log(this)
+        console.log(this);
     };
 
     draw() {
@@ -38,7 +40,7 @@ export class BaseComponent{
         return Object.keys(this).reduce((properties, key) => {
             if (!this.exclude_props_on_clone.includes(key)) {
                 properties[key] = this[key];
-            }
+            };
             return properties;
         }, {});
     };

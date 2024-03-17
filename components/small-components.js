@@ -71,7 +71,7 @@ export class StatusLight extends BaseComponent {
 export class Cord extends BaseComponent {
     constructor({
         grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
-        type = 'ConnectionLine',
+        type = 'Cord',
         cord_color = getRandomElement(['white', '#2C8BFF', '#FF4B4B']),
         in_co_ords = [],
         out_co_ords = []
@@ -90,7 +90,6 @@ export class Cord extends BaseComponent {
         super.draw();
         var heads = this.drawHeads();
         var cord = this.drawCord();
-        cord.selected = true
         this.group.addChildren([heads, cord]);
     };
 
@@ -120,9 +119,7 @@ export class Cord extends BaseComponent {
         var delta_y = Math.abs(start_point.point.y - end_point.point.y);
         delta_y = Math.floor(delta_y) > this.grid_size ? Math.floor(delta_y) : getRandomInt(this.grid_size * 3, 100);
         if (delta_x > this.grid_size) {
-            var sag_amount = getRandomInt(delta_y, delta_y * 2);
-            console.log(delta_y);
-            console.log(sag_amount);
+            var sag_amount = getRandomInt(delta_y / 2 , delta_y);
             start_point.handleOut = new Point(0, sag_amount);
             start_point.handleIn = new Point(0, sag_amount);
             end_point.handleOut = new Point(0, sag_amount);

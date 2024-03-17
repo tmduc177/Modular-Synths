@@ -57,7 +57,7 @@ export class Dial extends BaseComponent {
         this.light_edges = light_edges;
         this.connection_array = connection_array;
         /* ------------------------------------------------------ */
-        this.draw()
+        // this.draw()
     };
 
     draw() {

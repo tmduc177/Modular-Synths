@@ -18,7 +18,7 @@ export class PadBtn extends BaseComponent {
         this.raised_is_circle = raised_is_circle;
         this.unraised_and_has_light = unraised_and_has_light
         /********************************************************************/
-        this.draw();
+        // this.draw();
     };
 
     draw() {

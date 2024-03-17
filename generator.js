@@ -1,10 +1,8 @@
 const { Rectangle, Point, Path } = paper;
 import { defineSynthSize } from "./components/synth-container.js";
-import { Slider } from "./components/slider.js";
-import { Dial } from "./components/dial.js";
-import { PadBtn } from "./components/pad-btn.js";
-import { Toggle } from "./components/toggle.js";
 import { ConnectionArray } from "./components/connection-array.js";
+import { DialArray } from "./components/dial-array.js";
+import { getRandomInt } from "./components/helper-funcs.js";
 
 var bottom_canvas_height = window.innerHeight;
 var bottom_canvas_width = window.innerWidth;
@@ -41,11 +39,25 @@ window.onload = function() {
     // // synth_container_path.strokeColor = defaultStrokeColor;
 
     var connections = new ConnectionArray()
-    var newDial = new Dial({origin_x: 100, origin_y: 200, has_jack: true, connection_array: connections});
-    var newSlider = new Slider({origin_x: 400, origin_y: 200, has_jack: true, connection_array: connections});
-    var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500});
-    var newToggle = new Toggle({origin_x: 400, origin_y: 500});
-    connections.connectRandomPair();
-    connections.cords.bringToFront();
-    connections.cords.opacity = 0.75;
+    // var newDial = new Dial({origin_x: 100, origin_y: 200, has_jack: true, connection_array: connections});
+    // var newSlider = new Slider({origin_x: 400, origin_y: 200, has_jack: true, connection_array: connections});
+    // var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500});
+    // var newToggle = new Toggle({origin_x: 400, origin_y: 500});
+    // connections.connectRandomPair();
+    // connections.cords.bringToFront();
+    // connections.cords.opacity = 0.75;
+    var newDialArray = new DialArray({
+        connection_array: connections,
+        dial_constraints: {
+            origin_x: 100,
+            origin_y: 100,
+            knob_radius_factor: 1.5,
+            has_light: false,
+            has_jack: true,
+            connection_array: connections
+        }
+    })
+    connections.connectRandomMulti({pair_quantity: getRandomInt(1, connections.jacks.length / 2)})
+    connections.cords.bringToFront()
+    connections.cords.opacity = 0.75
 }

@@ -26,7 +26,7 @@ export class Toggle extends BaseComponent{
         this.ridges_factor_1 = ridges_factor_1;
         this.ridges_factor_2 = ridges_factor_2;
         /********************************************************************/
-        this.draw()
+        // this.draw()
     };
 
     draw() {

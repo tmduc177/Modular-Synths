@@ -56,7 +56,7 @@ export class Slider extends BaseComponent {
         this.mark_w = mark_w_factor * this.grid_size * 2;
         this.tick_w = tick_w_factor * this.grid_size;
         this.exclude_props_on_clone.concat(['track_length', 'knob_radius', 'mark_w', 'tick_w'])
-        this.draw()
+        // this.draw()
     };
 
     draw() {
