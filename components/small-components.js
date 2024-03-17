@@ -1,5 +1,5 @@
 import { BaseComponent } from "./base-component.js";
-import { binaryChoice, getRandomElement, strokePath } from "./helper-funcs.js";
+import { binaryChoice, getRandomElement, getRandomInt, strokePath } from "./helper-funcs.js";
 const { Path, Point, Group } = paper;
 
 export class Jack extends BaseComponent {
@@ -72,10 +72,12 @@ export class Cord extends BaseComponent {
     constructor({
         grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
         type = 'ConnectionLine',
+        cord_color = getRandomElement(['white', '#2C8BFF', '#FF4B4B']),
         in_co_ords = [],
         out_co_ords = []
     }) {
         super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type})
+        this.cord_color = cord_color;
         this.in_co_ords = in_co_ords;
         this.out_co_ords = out_co_ords;
         this.exclude_props_on_clone.concat(['in_point', 'out_point'])
@@ -92,22 +94,38 @@ export class Cord extends BaseComponent {
     };
 
     drawHeads() {
-        var heads = new Group()
+        var heads = new Group();
         var head_in = new Path.Circle(this.in_point, this.grid_size * 0.75);
         var head_out = new Path.Circle(this.out_point, this.grid_size * 0.75);
         heads.addChildren([head_in, head_out]);
-        heads.fillColor = this.color;
+        heads.fillColor = this.cord_color;
         return heads;
     };
 
     drawCord() {
         var cord = new Path.Line(this.in_point, this.out_point);
         this.sagCord(cord);
-        strokePath(cord, {stroke_width: 3});
+        strokePath(cord, {stroke_width: 5});
+        cord.strokeColor = this.cord_color;
         return cord;
     };
 
     sagCord(cord) {
-        
+        var higher_end = cord.segments[0].point.y > cord.segments[1].point.y ? 1 : 0;
+        var lower_end = higher_end ? 0 : 1;
+        var start_point = cord.segments[higher_end];
+        var end_point = cord.segments[lower_end];
+        var delta_x = Math.abs(start_point.point.x - end_point.point.x)
+        var delta_y = Math.abs(start_point.point.y - end_point.point.y);
+        delta_y = Math.floor(delta_y) > this.grid_size ? Math.floor(delta_y) : getRandomInt(this.grid_size * 3, 100);
+        if (delta_x > this.grid_size) {
+            var sag_amount = getRandomInt(delta_y, delta_y * 2);
+            console.log(delta_y);
+            console.log(sag_amount);
+            start_point.handleOut = new Point(0, sag_amount);
+            start_point.handleIn = new Point(0, sag_amount);
+            end_point.handleOut = new Point(0, sag_amount);
+            end_point.handleIn = new Point(0, sag_amount);
+        };
     };
 };

@@ -46,5 +46,6 @@ window.onload = function() {
     var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500});
     var newToggle = new Toggle({origin_x: 400, origin_y: 500});
     connections.connectRandomPair();
-    console.log(connections);
+    connections.cords.bringToFront();
+    connections.cords.opacity = 0.75;
 }
