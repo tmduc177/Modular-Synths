@@ -90,6 +90,7 @@ export class Cord extends BaseComponent {
         super.draw();
         var heads = this.drawHeads();
         var cord = this.drawCord();
+        cord.selected = true
         this.group.addChildren([heads, cord]);
     };
 
