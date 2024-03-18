@@ -49,7 +49,7 @@ window.onload = function() {
     var newDialArray = new DialArray({
         connection_array: connections,
         dial_constraints: {
-            origin_x: 550,
+            origin_x: 300,
             origin_y: 200,
             connection_array: connections
         }

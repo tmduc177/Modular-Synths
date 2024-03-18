@@ -23,7 +23,7 @@ export class DialArray extends BaseComponent {
         /************************************************************/
         this.layouts = [
             this.drawMatrix,
-            this.drawRadial,
+            this.drawOrbit,
         ]
         this.exclude_props_on_clone.push['layouts']
         this.draw()
@@ -38,8 +38,8 @@ export class DialArray extends BaseComponent {
                 case 'matrix':
                     this.drawMatrix(this.force_layout_params);
                     break;
-                case 'radial':
-                    this.drawRadial(this.force_layout_params);
+                case 'orbit':
+                    this.drawOrbit(this.force_layout_params);
                     break;
                 default:
                     console.log('layout not available');
@@ -48,10 +48,19 @@ export class DialArray extends BaseComponent {
         };
     };
 
-    drawMatrix() {
+    drawMatrix(options = {}) {
+        const {
+            row_quantity = getRandomInt(2, 5), 
+            col_quantity = getRandomInt(2, 5), 
+            stagger_matrix = binaryChoice(0.5, true, false)
+        } = options
+        var stagger = stagger_matrix 
+        if ((row_quantity * col_quantity) > 10) {stagger = false}
+        var stagger_col = stagger && (row_quantity > col_quantity) ? true : false;
+        var stagger_row = stagger && !stagger_col ? true : false;
         var dial_matrix = new Group();
-        var matrix_x_quantity = getRandomInt(2, 5);
-        var matrix_y_quantity = getRandomInt(2, 5);
+        var matrix_x_quantity = col_quantity
+        var matrix_y_quantity = row_quantity
         this.dial_constraints.origin_x += this.grid_size;
         this.dial_constraints.origin_y += this.grid_size;
         var template = new Dial(this.dial_constraints);
@@ -59,10 +68,13 @@ export class DialArray extends BaseComponent {
         var template_params = template.cloneDeterminants();
         var template_w = template.group.bounds.width;
         var template_h = template.group.bounds.height;
+        var col_stagger_amount = stagger_col ? template_h / 2 : 0;
+        var row_stagger_amount = stagger_row ? template_w / 2 : 0;
         function makeRow(first_row_obj, quantity, grid_size, obj_w, group) {
             for (var i = 1; i < quantity; i++) {
                 var params = first_row_obj.cloneDeterminants()
                 params.origin_x += i * (grid_size + obj_w);
+                params.origin_y += col_stagger_amount;
                 var cloned_obj = new Dial(params);
                 cloned_obj.draw();
                 group.addChild(cloned_obj.group);
@@ -71,6 +83,7 @@ export class DialArray extends BaseComponent {
         makeRow(template, matrix_x_quantity, this.grid_size, template_w, dial_matrix);
         for (var i = 1; i < matrix_y_quantity; i++) {
             template_params.origin_y += this.grid_size + template_h;
+            template_params.origin_x += row_stagger_amount;
             var row_starter = new Dial(template_params);
             row_starter.draw()
             makeRow(row_starter, matrix_x_quantity, this.grid_size, template_w, dial_matrix);
@@ -79,7 +92,7 @@ export class DialArray extends BaseComponent {
         this.group.addChild(template.group)
     };
 
-    drawRadial(options = {}) {
+    drawOrbit(options = {}) {
         const { orbit_quantity = getRandomInt(3, 6) } = options;
         var radial_array = new Group();
         var center_constraints = {...this.dial_constraints};
@@ -111,6 +124,7 @@ export class DialArray extends BaseComponent {
             orbit_group.addChild(orbit_dial.group);
         };
         radial_array.addChildren(center_dial.group, orbit_group)
+        this.group.addChild(radial_array)
     };
 };
 
