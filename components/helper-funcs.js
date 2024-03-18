@@ -29,3 +29,13 @@ export function getTopLeft(w, h, center_point) {
 export function getBottomRight(w, h, center_point) {
     return new Point(center_point.x + (w / 2),center_point.y + (h / 2))
 }
+
+export function getRandomString(options = {}) {
+    const {length = 3} = options;
+    const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var random_string = '';
+    for (var i = 0; i < length; i++) {
+        random_string += getRandomElement(characters)
+    };
+    return random_string;
+};

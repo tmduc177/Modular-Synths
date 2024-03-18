@@ -1,4 +1,4 @@
-const { Group } = paper;
+const { Group, Point } = paper;
 import { BaseComponent } from "./base-component.js";
 import { binaryChoice, getRandomElement, getRandomInt } from "./helper-funcs.js";
 import { Dial } from "./dial.js";
@@ -9,24 +9,43 @@ export class DialArray extends BaseComponent {
         type = 'DialArray',
         array_width = 500,
         array_height = 500,
+        force_layout = false,
+        force_layout_params,
         dial_constraints,
     }) {
         super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
         /************************************************************/
         this.array_width = array_width;
         this.array_height = array_height;
+        this.force_layout = force_layout;
+        this.force_layout_params = force_layout_params;
         this.dial_constraints = dial_constraints;
         /************************************************************/
         this.layouts = [
-            this.drawMatrix
+            this.drawMatrix,
+            this.drawRadial,
         ]
         this.exclude_props_on_clone.push['layouts']
         this.draw()
     };
 
     draw() {
-        const randomLayout = getRandomElement(this.layouts)
-        randomLayout.call(this)
+        if (!this.force_layout) {
+            const randomLayout = getRandomElement(this.layouts)
+            randomLayout.call(this)
+        } else {
+            switch (this.force_layout) {
+                case 'matrix':
+                    this.drawMatrix(this.force_layout_params);
+                    break;
+                case 'radial':
+                    this.drawRadial(this.force_layout_params);
+                    break;
+                default:
+                    console.log('layout not available');
+                    break;
+            };
+        };
     };
 
     drawMatrix() {
@@ -57,7 +76,41 @@ export class DialArray extends BaseComponent {
             makeRow(row_starter, matrix_x_quantity, this.grid_size, template_w, dial_matrix);
             dial_matrix.addChild(row_starter.group);
         };
-        dial_matrix.addChild(template.group)
+        this.group.addChild(template.group)
+    };
+
+    drawRadial(options = {}) {
+        const { orbit_quantity = getRandomInt(3, 6) } = options;
+        var radial_array = new Group();
+        var center_constraints = {...this.dial_constraints};
+        center_constraints.has_jack = false;
+        center_constraints.has_light = false;
+        var center_r_factor = getRandomElement([3, 2]);
+        var orbit_r_reverse_factor = getRandomElement([2, 1.5])
+        var orbit_dials_r_factor = center_r_factor / orbit_r_reverse_factor;
+        center_constraints.knob_radius_factor = center_r_factor
+        var center_dial = new Dial(center_constraints);
+        var orbit_params = center_dial.cloneDeterminants();
+        orbit_params.knob_radius_factor = orbit_dials_r_factor
+        center_dial.draw();
+        var center_w = center_dial.group.bounds.width;
+        var center_h = center_dial.group.bounds.height;
+        var orbit_radius = (center_h / 2) + ((center_h / orbit_r_reverse_factor) / 2)
+        if (center_w > center_h) {
+            orbit_radius = (center_w / 2) + ((center_w / orbit_r_reverse_factor) / 2)
+        };
+        orbit_radius += this.grid_size * 3
+        var arc_radian = (2 * Math.PI) / orbit_quantity
+        var orbit_group = new Group()
+        var rotation_center = new Point(center_dial.group.position.x, center_dial.group.position.y)
+        for (var i = 0; i < orbit_quantity; i++) {
+            orbit_params.origin_x = rotation_center.x + (orbit_radius * Math.cos(i * arc_radian));
+            orbit_params.origin_y = rotation_center.y + (orbit_radius * Math.sin(i * arc_radian));
+            var orbit_dial = new Dial(orbit_params);
+            orbit_dial.draw();
+            orbit_group.addChild(orbit_dial.group);
+        };
+        radial_array.addChildren(center_dial.group, orbit_group)
     };
 };
 

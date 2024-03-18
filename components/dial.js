@@ -1,6 +1,6 @@
-const { Point, Path, Group } = paper;
+const { Point, Path, Group, PointText } = paper;
 import { BaseComponent } from "./base-component.js";
-import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice } from "./helper-funcs.js";
+import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice, getRandomString } from "./helper-funcs.js";
 import { Jack, StatusLight } from "./small-components.js";
 
 export class Dial extends BaseComponent {
@@ -64,6 +64,7 @@ export class Dial extends BaseComponent {
         super.draw();
         this.drawKnob();
         this.drawNotches();
+        this.drawName();
         if (this.has_jack) {this.drawJack()};
         if (this.has_light) {this.drawLight()};
     };
@@ -207,16 +208,28 @@ export class Dial extends BaseComponent {
         return ticks;
     };
 
+    drawName() {
+        var text_x = this.group.position.x
+        var text_y = this.group.position.y + (this.group.bounds.height / 2) + (this.grid_size * 2)
+        var knob_name = new PointText(new Point(text_x, text_y))
+        knob_name.justification = 'center'
+        knob_name.fontFamily = 'monospace'
+        knob_name.fontWeight = 'bold'
+        knob_name.content = getRandomString();
+        knob_name.fillColor = this.color
+        this.group.addChild(knob_name)
+    };
+
     drawJack() {
         var jack_center_x = this.group.position.x;
-        var jack_center_y = this.group.position.y + (this.group.bounds.height / 2) + this.grid_size * 4.5;
+        var jack_center_y = this.group.position.y + (this.group.bounds.height / 2) + (this.grid_size * 2);
         var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges, connection_array: this.connection_array});
         this.group.addChild(jack.group);
     };
 
     drawLight() {
         var light_center_x = this.group.position.x;
-        var light_center_y = this.group.position.y - (this.group.bounds.height / 2) - (this.grid_size * 4.5);
+        var light_center_y = this.group.position.y - (this.group.bounds.height / 2) - (this.grid_size);
         var light = new StatusLight({origin_x: light_center_x, origin_y: light_center_y, edges: this.light_edges});
         this.group.addChild(light.group);
     };
