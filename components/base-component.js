@@ -25,7 +25,7 @@ export class BaseComponent{
         this.padding_bottom = padding_bottom
         this.padding_left = padding_left
         this.padding_right = padding_right
-        this.exclude_props_on_clone = ['type', 'origin_point', 'exclude_props_on_clone']
+        this.exclude_props_on_clone = ['type', 'origin_point', 'exclude_props_on_clone', 'group']
         this.group = new Group()
     };
 
