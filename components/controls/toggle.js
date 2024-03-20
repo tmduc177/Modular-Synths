@@ -4,7 +4,7 @@ import { binaryChoice, getBottomRight, getRandomElement, getTopLeft, strokePath 
 
 export class Toggle extends BaseComponent{
     constructor({
-        grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
+        grid_size, color, origin_x, origin_y,
         type = 'Toggle',
         style = getRandomElement([1, 2, 3]),
         is_horizontal = binaryChoice(0.5, true, false),
@@ -15,7 +15,7 @@ export class Toggle extends BaseComponent{
         ridges_factor_1 = 6,
         ridges_factor_2 = 10,
     }) {
-        super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
+        super({grid_size, color, origin_x, origin_y, type});
         /********************************************************************/
         this.style = style;
         this.is_horizontal = is_horizontal;

@@ -4,14 +4,14 @@ import { Jack } from '../controls/small-components.js'
 
 export class JackArray extends BaseComponent {
     constructor({
-        grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
+        grid_size, color, origin_x, origin_y,
         type = 'JackArray',
         array_width = 500,
         array_height = 500,
         force_layout = false,
         force_layout_params = false
     }) {
-        super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_left, padding_right, type});
+        super({grid_size, color, origin_x, origin_y, type});
         this.array_width = array_width;
         this.array_height = array_height;
         this.force_layout = force_layout;

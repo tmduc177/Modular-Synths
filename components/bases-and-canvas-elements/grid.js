@@ -5,14 +5,14 @@ import { strokePath } from "./helper-funcs.js";
 
 export class BaseGrid extends BaseComponent {
     constructor({
-        grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
+        grid_size, color, origin_x, origin_y,
         type = 'BaseGrid',
         total_width = 500,
         total_height = 500, 
         marks_interval = 50,
         multiple = 5
     }) {
-        super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type})
+        super({grid_size, color, origin_x, origin_y, type})
         this.total_height = total_height;
         this.total_width = total_width;
         this.multiple = multiple;

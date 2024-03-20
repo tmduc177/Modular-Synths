@@ -28,7 +28,7 @@ export class Slider extends BaseComponent {
         light_edges = binaryChoice(0.5, 0, 4),
         connection_array
     }) {
-        super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
+        super({grid_size, color, origin_x, origin_y, type});
         /********************************************************************/
         this.is_horizontal = is_horizontal;
         this.knob_edges = knob_edges;

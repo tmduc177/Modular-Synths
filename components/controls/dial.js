@@ -1,11 +1,11 @@
 const { Point, Path, Group, PointText } = paper;
 import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
-import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice, getRandomString } from "../bases-and-canvas-elements/helper-funcs.js";
-import { Jack, StatusLight } from "./small-components.js";
+import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice, getRandomString } from "../helper-funcs.js";
+import { Jack, StatusLight } from "../small-components.js";
 
 export class Dial extends BaseComponent {
     constructor({
-        grid_size, origin_x, origin_y, color, padding_top, padding_bottom, padding_right, padding_left,
+        grid_size, origin_x, origin_y, color,
         type = 'Dial',
         knob_radius_factor = getRandomElement([1.5, 2, 2.5, 3, 4]),
         knob_is_grooved = binaryChoice(0.5, true, false),
@@ -30,7 +30,7 @@ export class Dial extends BaseComponent {
         light_edges = binaryChoice(0.5, 0, 4),
         // connection_array
     }) {
-        super({grid_size, origin_x, origin_y, color, padding_top, padding_bottom, padding_right, padding_left, type});
+        super({grid_size, origin_x, origin_y, color, type});
         /* ------------------------------------------------------ */
         this.knob_radius_factor = knob_radius_factor;
         this.knob_is_grooved = knob_is_grooved;

@@ -4,14 +4,14 @@ import { binaryChoice, strokePath } from "../bases-and-canvas-elements/helper-fu
 
 export class PadBtn extends BaseComponent {
     constructor({
-        grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
+        grid_size, color, origin_x, origin_y,
         type = 'PadBtn',
         length_factor = 5,
         is_raised = binaryChoice(0.5, true, false),
         raised_is_circle = binaryChoice(0.5, true, false),
         unraised_and_has_light = binaryChoice(0.5, true, false)
     }) {
-        super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
+        super({grid_size, color, origin_x, origin_y, type});
         /********************************************************************/
         this.length_factor = length_factor;
         this.is_raised = is_raised;

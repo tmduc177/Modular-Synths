@@ -1,6 +1,6 @@
 const { Group, Point } = paper;
 import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
-import { binaryChoice, getRandomElement, getRandomInt } from "../bases-and-canvas-elements/helper-funcs.js";
+import { binaryChoice, getRandomElement, getRandomInt } from "../helper-funcs.js";
 import { Dial } from "../controls/dial.js";
 
 function estimateSize(params) {
@@ -22,7 +22,7 @@ function estimateSize(params) {
 
 export class DialArray extends BaseComponent {
     constructor({
-        grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
+        grid_size, color, origin_x, origin_y, 
         type = 'DialArray',
         array_width = 500,
         array_height = 500,
@@ -30,7 +30,7 @@ export class DialArray extends BaseComponent {
         force_layout_params,
         dial_constraints,
     }) {
-        super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
+        super({grid_size, color, origin_x, origin_y, type});
         /************************************************************/
         this.array_width = array_width;
         this.array_height = array_height;
