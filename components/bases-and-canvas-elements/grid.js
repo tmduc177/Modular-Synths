@@ -1,7 +1,6 @@
 const { Path, Point, Group, PointText } = paper
-
-import { BaseComponent } from "./base-component.js"
-import { strokePath } from "./helper-funcs.js";
+import { BaseComponent } from "./base-component.js";
+import { strokePath } from "../helper-funcs.js";
 
 export class BaseGrid extends BaseComponent {
     constructor({

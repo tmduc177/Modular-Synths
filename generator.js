@@ -3,7 +3,7 @@ import { defineSynthSize } from "./components/bases-and-canvas-elements/synth-co
 import { ConnectionArray } from "./components/arrays/connection-array.js";
 import { Dial } from "./components/controls/dial.js";
 import { DialArray } from "./components/arrays/dial-array.js";
-import { getRandomInt } from "./components/bases-and-canvas-elements/helper-funcs.js";
+import { getRandomInt } from "./components/helper-funcs.js";
 import { BaseGrid } from "./components/bases-and-canvas-elements/grid.js";
 
 var bottom_canvas_height = window.innerHeight;
