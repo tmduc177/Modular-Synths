@@ -54,8 +54,7 @@ window.onload = function() {
             origin_x: 600,
             origin_y: 300,
             has_light: false,
-        },
-        force_layout: 'leader',
+        }
     })
     connections.connectRandomMulti({pair_quantity: getRandomInt(1, connections.jacks.length / 2)})
     connections.cords.bringToFront()
