@@ -42,29 +42,21 @@ window.onload = function() {
     var base_grid = new BaseGrid({total_width: main_canvas.width, total_height: main_canvas.height})
 
     var connections = new ConnectionArray()
-    var newDial = new Dial({origin_x: 600, origin_y: 200});
-    newDial.draw()
-    newDial.group.bounds.selected = true
-    console.log('actual size ', newDial.getGroupSize())
-    console.log('estimated size ', newDial.estimateSize())
     // var newSlider = new Slider({origin_x: 400, origin_y: 200, has_jack: true, connection_array: connections});
     // var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500});
     // var newToggle = new Toggle({origin_x: 400, origin_y: 500});
     // connections.connectRandomPair();
     // connections.cords.bringToFront();
     // connections.cords.opacity = 0.75;
-    // var newDialArray = new DialArray({
-    //     connection_array: connections,
-    //     dial_constraints: {
-    //         origin_x: 200,
-    //         origin_y: 100,
-    //         has_light: false,
-    //     },
-    //     force_layout: 'leader',
-    //     force_layout_params: {
-    //         leader_position: 'top'
-    //     }
-    // })
+    var newDialArray = new DialArray({
+        connection_array: connections,
+        dial_constraints: {
+            origin_x: 600,
+            origin_y: 300,
+            has_light: false,
+        },
+        force_layout: 'leader',
+    })
     connections.connectRandomMulti({pair_quantity: getRandomInt(1, connections.jacks.length / 2)})
     connections.cords.bringToFront()
     connections.cords.opacity = 0.75

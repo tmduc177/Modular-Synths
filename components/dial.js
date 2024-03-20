@@ -218,7 +218,6 @@ export class Dial extends BaseComponent {
         knob_name.fontWeight = 'bold'
         knob_name.content = getRandomString();
         knob_name.fillColor = this.color
-        console.log(knob_name.fontSize)
         this.group.addChild(knob_name)
     };
 

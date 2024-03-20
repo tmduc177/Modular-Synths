@@ -16,7 +16,7 @@ function estimateSize(params) {
     var name_height = params.grid_size;
     var est_w = (notches_distance * 2) + notch_length;
     var est_h = est_w + light_height + name_height + (params.grid_size * 2);
-    return est_h;
+    return {est_w: est_w, est_h: est_h};
 }
 
 
@@ -66,6 +66,90 @@ export class DialArray extends BaseComponent {
                     console.log('layout not available');
                     break;
             };
+        };
+    };
+
+    drawLeader(options = {}) {
+        var { 
+            leader_position = getRandomElement(['top', 'bottom', 'left', 'right']),
+            follower_cols = getRandomInt(1, 2),
+            follower_rows = getRandomInt(2, 4)
+        } = options;
+        var big_dial_constraints = {...this.dial_constraints};
+        big_dial_constraints.knob_radius_factor = getRandomElement([2, 3]);
+        var { template_params, template_size } = this.createBigDialTemplate(big_dial_constraints);
+        var leader = new Dial(template_params);
+        leader.draw();
+        var follower_params = {...template_params}
+        var follower_size_factor = getRandomElement([1.5, 2]);
+        follower_params.knob_radius_factor = follower_params.knob_radius_factor / follower_size_factor;
+        follower_params.indicator_size_factor = follower_params.indicator_size_factor / follower_size_factor;
+        var follower_size = estimateSize(follower_params);
+        switch (leader_position) {
+            case 'top':
+                var first_follower_x = template_params.origin_x - (((follower_size.est_w + this.grid_size) / 2) * (follower_cols - 1));
+                var first_follower_y = template_params.origin_y + (template_size.est_h / 2) + (follower_size.est_h / 2);
+                break;
+            case 'bottom':
+                var first_follower_x = template_params.origin_x - (((follower_size.est_w + this.grid_size) / 2) * (follower_cols - 1));
+                var first_follower_y = template_params.origin_y - (template_size.est_h / 2) - (follower_rows * this.grid_size) - ((follower_size.est_h * ((2 * follower_rows) - 1)) / 2)
+                break;
+            case 'left':
+                [follower_cols, follower_rows] = [follower_rows, follower_cols]
+                var first_follower_x = template_params.origin_x + (template_size.est_w / 2) + (follower_size.est_w / 2) + this.grid_size;
+                var first_follower_y = template_params.origin_y - (((follower_size.est_w / 2) + this.grid_size) * (follower_rows - 1));
+                break;
+            case 'right':
+                [follower_cols, follower_rows] = [follower_rows, follower_cols]
+                var first_follower_x = template_params.origin_x - (template_size.est_w / 2) - (follower_cols * this.grid_size) - ((((2 * follower_cols) - 1) * follower_size.est_w) / 2)
+                var first_follower_y = template_params.origin_y - (((follower_size.est_w / 2) + this.grid_size) * (follower_rows - 1));
+            default:
+                console.log('invalid leader position')
+                break;
+        };
+        follower_params.origin_x = first_follower_x;
+        follower_params.origin_y = first_follower_y;
+        this.drawMatrix({overwrite_params: follower_params, total_cols: follower_cols, total_rows: follower_rows});
+    };
+
+    createBigDialTemplate(constraints) {
+        var template_constraints = constraints ? constraints : this.dial_constraints;
+        var template_dial = new Dial(template_constraints);
+        var template_params = template_dial.cloneDeterminants();
+        var template_size = estimateSize(template_params);
+        template_dial = null;
+        return {template_params: template_params, template_size: template_size};
+    }
+
+    drawMatrix(options = {}) {
+        const { overwrite_params = false,
+                total_cols = getRandomInt(2, 4),
+                total_rows = getRandomInt(2, 4),
+                stagger = false,
+        } = options;
+        var first_dial_params = overwrite_params ? overwrite_params : this.dial_constraints;
+        var first_dial = new Dial(first_dial_params);
+        first_dial.draw();
+        var first_dial_size = estimateSize(first_dial.cloneDeterminants());
+        var shift_x = first_dial_size.est_w + this.grid_size;
+        if (stagger == 'x') {shift_x += first_dial.est_w / 2}
+        var shift_y = first_dial_size.est_h + this.grid_size;
+        if (stagger == 'y') {shift_y += first_dial.est_h / 2};
+        function makeRow(first_dial, duplicates, shift_x) {
+            for (var i = 1; i < duplicates; i++) {
+                var cloned_dial_params = first_dial.cloneDeterminants();
+                cloned_dial_params.origin_x = cloned_dial_params.origin_x + (i * shift_x);
+                var cloned_dial = new Dial(cloned_dial_params);
+                cloned_dial.draw();
+            }
+        }
+        makeRow(first_dial, total_cols, shift_x);
+        for (var i = 1; i < total_rows; i++) {
+            var cloned_first_dial_params = first_dial.cloneDeterminants();
+            cloned_first_dial_params.origin_y = cloned_first_dial_params.origin_y + (i * shift_y);
+            var cloned_first_dial = new Dial(cloned_first_dial_params);
+            cloned_first_dial.draw();
+            makeRow(cloned_first_dial, total_cols, shift_x);
         };
     };
 
@@ -148,35 +232,5 @@ export class DialArray extends BaseComponent {
     //     this.group.addChild(radial_array)
     // };
 
-    // drawLeader(options = {}) {
-    //     const {
-    //         leader_position = getRandomElement(['top', 'bottom', 'left', 'right']),
-    //         follower_rows = getRandomInt(2, 4),
-    //         follower_cols = getRandomInt(1, 2)
-    //     } = options
-    //     var leader_params = {...this.dial_constraints};
-    //     leader_params.knob_radius_factor = getRandomElement([2, 3]);
-    //     var leader = new Dial(leader_params);
-    //     leader.draw()
-    //     var follower_params = leader.cloneDeterminants();
-    //     var follower_r_scaler = getRandomElement([1.5, 2]);
-    //     follower_params.knob_radius_factor = follower_params.knob_radius_factor / follower_r_scaler;
-    //     var leader_size = leader.getGroupSize();
-    //     switch (leader_position) {
-    //         case 'top':
-    //             follower_params.origin_y += leader_size.h
-    //             break;
-    //         default:
-    //             console.log('invalid leader position')
-    //             break;
-    //         };
-
-    //     this.drawMatrix({
-    //         row_quantity: follower_rows, 
-    //         col_quantity: follower_cols, 
-    //         stagger: false, 
-    //         overwrite_constraints: follower_params
-    //     })
-    // };
 };
 
