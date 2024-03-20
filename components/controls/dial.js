@@ -235,22 +235,4 @@ export class Dial extends BaseComponent {
         var light = new StatusLight({origin_x: light_center_x, origin_y: light_center_y, edges: this.light_edges});
         this.group.addChild(light.group);
     };
-
-    move(x, y) {
-        this.origin_x += x;
-        this.origin_y += y;
-        this.origin_point = new Point(this.origin_x, this.origin_y);
-        if (this.drawn) {
-            this.group.position.x += x;
-            this.group.position.y += y;
-        };
-    };
-
-    getGroupSize() {
-        if (this.drawn) {
-            return {w: this.group.bounds.width, h: this.group.bounds.height}  
-        } else {
-            console.log('not drawn')
-        }
-    };
 };

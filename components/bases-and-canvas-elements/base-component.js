@@ -21,12 +21,13 @@ export class BaseComponent{
         this.origin_x = origin_x;
         this.origin_y = origin_y;
         this.origin_point = new Point(origin_x, origin_y);
-        this.padding_top = padding_top
-        this.padding_bottom = padding_bottom
-        this.padding_left = padding_left
-        this.padding_right = padding_right
-        this.exclude_props_on_clone = ['type', 'origin_point', 'exclude_props_on_clone', 'group']
-        this.group = new Group()
+        this.padding_top = padding_top;
+        this.padding_bottom = padding_bottom;
+        this.padding_left = padding_left;
+        this.padding_right = padding_right;
+        this.drawn = false;
+        this.exclude_props_on_clone = ['type', 'origin_point', 'exclude_props_on_clone', 'group', 'drawn'];
+        this.group = new Group();
     };
 
     logProperties() {
@@ -34,7 +35,12 @@ export class BaseComponent{
     };
 
     draw() {
-    }
+        if (this.drawn == true) {
+            console.log('already drawn');
+            return void 0;
+        }
+        this.drawn = true;
+    };
 
     cloneDeterminants() {
         return Object.keys(this).reduce((properties, key) => {
@@ -43,5 +49,23 @@ export class BaseComponent{
             };
             return properties;
         }, {});
+    };
+
+    move(by_x, by_y) {
+        this.origin_x += by_x;
+        this.origin_y += by_y;
+        this.origin_point = new Point(this.origin_x, this.origin_y);
+        if (this.drawn) {
+            this.group.position.x += by_x;
+            this.group.position.y += by_y;
+        };
+    };
+
+    getGroupSize() {
+        if (this.drawn) {
+            return {w: this.group.bounds.width, h: this.group.bounds.height};
+        } else {
+            console.log('not drawn')
+        }''
     };
 };
