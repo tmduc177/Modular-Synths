@@ -51,8 +51,8 @@ window.onload = function() {
     var newDialArray = new DialArray({
         connection_array: connections,
         dial_constraints: {
-            origin_x: 600,
-            origin_y: 300,
+            origin_x: drawable_canvas_width / 2,
+            origin_y: drawable_canvas_height / 2,
             has_light: false,
         }
     })
