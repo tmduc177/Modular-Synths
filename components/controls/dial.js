@@ -58,7 +58,6 @@ export class Dial extends BaseComponent {
         // this.connection_array = connection_array;
         /* ------------------------------------------------------ */
         // this.draw()
-        this.exclude_props_on_clone.concat(['drawn'])
     };
 
     draw() {

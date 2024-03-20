@@ -38,19 +38,19 @@ export class DialArray extends BaseComponent {
         this.force_layout_params = force_layout_params;
         this.dial_constraints = dial_constraints;
         /************************************************************/
-        this.exclude_props_on_clone.concat(['drawn'])
         this.layouts = [
             this.drawMatrix,
             this.drawOrbit,
             this.drawLeader
         ];
         this.dials = [];
-        this.exclude_props_on_clone.push['layouts', 'dials'];
+        this.exclude_props_on_clone.concat(['layouts', 'dials']);
         this.draw();
         this.makeGroup();
     };
 
     draw() {
+        super.draw();
         if (!this.force_layout) {
             const randomLayout = getRandomElement(this.layouts)
             randomLayout.call(this)
@@ -62,7 +62,6 @@ export class DialArray extends BaseComponent {
                 default: console.log('layout not available'); break;
             };
         };
-        this.drawn = true;
     };
 
     drawLeader(options = {}) {
