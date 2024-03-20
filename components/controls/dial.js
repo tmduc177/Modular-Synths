@@ -209,14 +209,15 @@ export class Dial extends BaseComponent {
         return ticks;
     };
 
-    drawName() {
+    drawName(options = {}) {
+        const { force_name } = options
         var text_x = this.group.position.x
         var text_y = this.group.position.y + (this.group.bounds.height / 2) + (this.grid_size * 2)
         var knob_name = new PointText(new Point(text_x, text_y))
         knob_name.justification = 'center'
         knob_name.fontFamily = 'monospace'
         knob_name.fontWeight = 'bold'
-        knob_name.content = getRandomString();
+        knob_name.content = force_name ? force_name : getRandomString();
         knob_name.fillColor = this.color
         this.group.addChild(knob_name)
     };
