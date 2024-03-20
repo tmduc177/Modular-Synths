@@ -202,5 +202,13 @@ export class DialArray extends BaseComponent {
             console.log('not drawn');
         };
     };
+
+    centerAroundOrigin() {
+        var array_center_before = this.group.position
+        var drawing_initial_center = this.dials[0].origin_point
+        var shift_x = -(array_center_before.x - drawing_initial_center.x)
+        var shift_y = -(array_center_before.y - drawing_initial_center.y)
+        this.move(shift_x, shift_y)
+    };
 };
 

@@ -40,7 +40,6 @@ window.onload = function() {
     // // var synth_container_path = new Path.Rectangle(synth_container)
     // // synth_container_path.strokeColor = defaultStrokeColor;
     var base_grid = new BaseGrid({total_width: main_canvas.width, total_height: main_canvas.height})
-
     var connections = new ConnectionArray()
     // var newSlider = new Slider({origin_x: 400, origin_y: 200, has_jack: true, connection_array: connections});
     // var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500});
@@ -56,6 +55,7 @@ window.onload = function() {
             has_light: false,
         }
     })
+    newDialArray.centerAroundOrigin()
     connections.connectRandomMulti({pair_quantity: getRandomInt(1, connections.jacks.length / 2)})
     connections.cords.bringToFront()
     connections.cords.opacity = 0.75
