@@ -1,7 +1,7 @@
 const { Group, Point } = paper;
-import { BaseComponent } from "./base-component.js";
-import { binaryChoice, getRandomElement, getRandomInt } from "./helper-funcs.js";
-import { Dial } from "./dial.js";
+import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
+import { binaryChoice, getRandomElement, getRandomInt } from "../bases-and-canvas-elements/helper-funcs.js";
+import { Dial } from "../controls/dial.js";
 
 function estimateSize(params) {
     var outer_ring_radius = (1 + params.outer_ring_size_factor) * (params.knob_radius_factor * params.grid_size);

@@ -1,5 +1,5 @@
-import { BaseComponent } from "./base-component.js";
-import { binaryChoice, getRandomElement, getRandomInt, strokePath } from "./helper-funcs.js";
+import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
+import { binaryChoice, getRandomElement, getRandomInt, strokePath } from "../bases-and-canvas-elements/helper-funcs.js";
 const { Path, Point, Group } = paper;
 
 export class Jack extends BaseComponent {

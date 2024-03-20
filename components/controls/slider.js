@@ -1,6 +1,6 @@
 const { Path, Point, Group } = paper
-import { BaseComponent } from "./base-component.js";
-import { binaryChoice, decimalPoint, getRandomElement, getRandomInt, strokePath } from "./helper-funcs.js";
+import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
+import { binaryChoice, decimalPoint, getRandomElement, getRandomInt, strokePath } from "../bases-and-canvas-elements/helper-funcs.js";
 import { Jack, StatusLight } from "./small-components.js";
 
 export class Slider extends BaseComponent {

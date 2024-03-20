@@ -1,7 +1,7 @@
 const { Path, Point, Group } = paper;
-import { default_grid_size, default_color } from "./base-component.js";
-import { getRandomInt } from "./helper-funcs.js";
-import { Cord } from "./small-components.js";
+import { default_grid_size, default_color } from "../bases-and-canvas-elements/base-component.js";
+import { getRandomInt } from "../bases-and-canvas-elements/helper-funcs.js";
+import { Cord } from "../controls/small-components.js";
 
 export class ConnectionArray {
     constructor() {

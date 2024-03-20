@@ -1,6 +1,6 @@
 const { Path, Point, Group } = paper
-import { BaseComponent } from "./base-component.js";
-import { binaryChoice, getBottomRight, getRandomElement, getTopLeft, strokePath } from "./helper-funcs.js";
+import { BaseComponent } from "../base-component.js";
+import { binaryChoice, getBottomRight, getRandomElement, getTopLeft, strokePath } from "../bases-and-canvas-elements/helper-funcs.js";
 
 export class Toggle extends BaseComponent{
     constructor({
