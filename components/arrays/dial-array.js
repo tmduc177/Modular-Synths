@@ -32,6 +32,7 @@ export class DialArray extends BaseComponentArray {
         /************************************************************/
         this.layouts = ['drawMatrix', 'drawOrbit', 'drawLeader']
         this.draw();
+        this.centerAroundOrigin();
     };
 
     drawLeader(options = {}) {

@@ -55,3 +55,7 @@ export function getRandomString(options = {}) {
     };
     return random_string;
 };
+
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

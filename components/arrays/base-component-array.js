@@ -20,8 +20,9 @@ export class BaseComponentArray extends BaseComponent {
         this.force_layout_params = force_layout_params;
         this.component_constraints = component_constraints;
         /***********************************************************************/
+        this.centered = false;
         this.components = [];
-        this.exclude_props_on_clone.concat(['layout', 'components']);
+        this.exclude_props_on_clone.concat(['layout', 'components', 'centered']);
         this.layouts = [];
     };
 
@@ -63,10 +64,16 @@ export class BaseComponentArray extends BaseComponent {
     };
     
     centerAroundOrigin() {
-        var array_center_before = this.group.position;
-        var array_initial_center = this.components[0].origin_point;
-        var shift_x = -(array_center_before.x - array_initial_center.x);
-        var shift_y = -(array_center_before.y - array_initial_center.y);
-        this.move(shift_x, shift_y);
+        if (this.centered) {
+            console.log('already centered')
+            return void 0;
+        } else {
+            var array_center_before = this.group.position;
+            var array_initial_center = this.components[0].origin_point;
+            var shift_x = -(array_center_before.x - array_initial_center.x);
+            var shift_y = -(array_center_before.y - array_initial_center.y);
+            this.move(shift_x, shift_y);
+            this.centered = true;
+        };
     };
 };

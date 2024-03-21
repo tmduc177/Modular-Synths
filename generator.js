@@ -62,6 +62,8 @@ window.onload = function() {
     // })
 
     var newDialPanel = new DialPanel({
+        origin_x: drawable_canvas_width / 2,
+        origin_y: drawable_canvas_height / 2,
         dial_constraints: {
             origin_x: drawable_canvas_width / 2,
             origin_y: drawable_canvas_height / 2

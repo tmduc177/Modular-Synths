@@ -51,6 +51,7 @@ export class Jack extends BaseComponent {
         jack_name.justification = 'center'
         jack_name.fontFamily = 'monospace'
         jack_name.fontWeight = 'bold'
+        jack_name.fontSize = this.grid_size
         jack_name.content = force_name ? force_name : getRandomString();
         jack_name.fillColor = this.color
         this.group.addChild(jack_name)

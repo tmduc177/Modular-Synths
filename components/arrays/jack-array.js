@@ -22,6 +22,7 @@ export class JackArray extends BaseComponentArray {
         this.connection_array = connection_array
         this.layouts = ['drawMatrix']
         this.draw();
+        this.centerAroundOrigin();
     };
 
     drawMatrix(options = {}) {

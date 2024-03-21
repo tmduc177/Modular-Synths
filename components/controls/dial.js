@@ -218,6 +218,7 @@ export class Dial extends BaseComponent {
         knob_name.justification = 'center'
         knob_name.fontFamily = 'monospace'
         knob_name.fontWeight = 'bold'
+        knob_name.fontSize = this.grid_size
         knob_name.content = force_name ? force_name : getRandomString();
         knob_name.fillColor = this.color
         this.group.addChild(knob_name)
