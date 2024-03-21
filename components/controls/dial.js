@@ -1,5 +1,5 @@
 const { Point, Path, Group, PointText } = paper;
-import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
+import { BaseComponent } from "../base-component.js";
 import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice, getRandomString } from "../helper-funcs.js";
 import { Jack, StatusLight } from "../small-components.js";
 

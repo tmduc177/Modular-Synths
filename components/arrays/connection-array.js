@@ -1,5 +1,5 @@
 const { Path, Point, Group } = paper;
-import { default_grid_size, default_color } from "../bases-and-canvas-elements/base-component.js";
+import { default_grid_size, default_color } from "../base-component.js";
 import { getRandomInt } from "../helper-funcs.js";
 import { Cord } from "../small-components.js";
 
@@ -19,7 +19,7 @@ export class ConnectionArray {
             this.addJackObj(jack_objs[i]);
         };
     };
-    
+
     connectPair(in_index, out_index) {
         this.jack_objs[in_index].connected = true;
         this.jack_objs[in_index].to = out_index;

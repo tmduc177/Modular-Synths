@@ -1,4 +1,4 @@
-import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
+import { BaseComponent } from "../base-component.js";
 import { getRandomElement } from "../helper-funcs.js";
 const { Group } = paper
 

@@ -1,4 +1,4 @@
-import { BaseComponent } from "./bases-and-canvas-elements/base-component.js";
+import { BaseComponent } from "./base-component.js";
 import { binaryChoice, getRandomElement, getRandomInt, strokePath, getRandomString } from "./helper-funcs.js";
 const { Path, Point, Group, PointText } = paper;
 
