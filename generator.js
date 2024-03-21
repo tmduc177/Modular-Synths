@@ -6,6 +6,7 @@ import { DialArray } from "./components/arrays/dial-array.js";
 import { getRandomInt } from "./components/helper-funcs.js";
 import { BaseGrid } from "./components/grid.js";
 import { JackArray } from "./components/arrays/jack-array.js";
+import { DialPanel } from "./components/panels/dial-panel.js";
 
 var bottom_canvas_height = window.innerHeight;
 var bottom_canvas_width = window.innerWidth;
@@ -52,14 +53,27 @@ window.onload = function() {
     //     },
     // })
     // newDialArray.centerAroundOrigin()
-    var newJackArray = new JackArray({
-        connection_array: connections,
-        component_constraints: {
+    // var newJackArray = new JackArray({
+    //     connection_array: connections,
+    //     component_constraints: {
+    //         origin_x: drawable_canvas_width / 2,
+    //         origin_y: drawable_canvas_height / 2
+    //     },
+    // })
+
+    var newDialPanel = new DialPanel({
+        dial_constraints: {
             origin_x: drawable_canvas_width / 2,
             origin_y: drawable_canvas_height / 2
         },
+        jack_constraints: {
+            origin_x: drawable_canvas_width / 2,
+            origin_y: drawable_canvas_height / 2
+        },
+        connection_array: connections
     })
-    newJackArray.centerAroundOrigin()
+
+    newDialPanel.draw()
     connections.connectRandomMulti({pair_quantity: getRandomInt(1, connections.jacks.length / 2)})
     connections.cords.bringToFront()
     connections.cords.opacity = 0.75

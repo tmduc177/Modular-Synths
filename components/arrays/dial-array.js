@@ -1,4 +1,3 @@
-const { Group, Point } = paper;
 import { BaseComponentArray } from "./base-component-array.js";
 import { binaryChoice, getRandomElement, getRandomInt } from "../helper-funcs.js";
 import { Dial } from "../controls/dial.js";
@@ -18,7 +17,6 @@ function estimateDialSize(params) {
     var est_h = est_w + light_height + name_height + params.grid_size;
     return {est_w: est_w, est_h: est_h};
 }
-
 
 export class DialArray extends BaseComponentArray {
     constructor({

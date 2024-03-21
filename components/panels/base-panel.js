@@ -1,4 +1,4 @@
-import { BaseComponent } from "../base-component";
+import { BaseComponent } from "../base-component.js";
 
 export class BasePanel extends BaseComponent {
     constructor({ 

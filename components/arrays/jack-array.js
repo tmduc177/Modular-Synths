@@ -1,4 +1,3 @@
-const { Point, Group } = paper
 import { getRandomElement, getRandomInt } from '../helper-funcs.js';
 import { Jack } from '../small-components.js'
 import { BaseComponentArray } from './base-component-array.js';
@@ -59,6 +58,5 @@ export class JackArray extends BaseComponentArray {
             this.components.push(cloned_template)
             makeRow(cloned_template, col_quantity, (this.grid_size + jack_radius) * 1.75, stagger_y, this.components)
         };
-        console.log(this.components)
     };
 };
