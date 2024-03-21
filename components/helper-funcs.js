@@ -1,4 +1,19 @@
 const { Point } = paper;
+import { default_grid_size, default_color } from './base-component.js'
+
+var default_stroke_width = default_grid_size / 5
+var default_stroke_color = default_color
+
+export function applyStroke(path, options = {}) {
+    const { 
+        width = default_stroke_width,
+        half_width = false,
+        color = default_color
+    };
+    if (half_width) {width = width / 2};
+    path.strokeWidth = width;
+    path.strokeColor = color;
+};
 
 export function getRandomElement(source_array) {
     return source_array[Math.floor(Math.random() * source_array.length)];
