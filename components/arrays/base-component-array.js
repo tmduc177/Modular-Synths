@@ -26,10 +26,10 @@ export class BaseComponentArray extends BaseComponent {
         this.layouts = [];
     };
 
-    callLayout(layout_name) {
+    callLayout(layout_name, params) {
         layout_name = 'draw' + layout_name.charAt(0).toUpperCase() + layout_name.slice(1);
         if (typeof this[layout_name] === 'function') {
-            this[layout_name]();
+            this[layout_name](params);
         } else {
             console.error('layout doesnt exist');
         };
@@ -45,7 +45,8 @@ export class BaseComponentArray extends BaseComponent {
                 console.error('layout doesnt exist')
             }
         } else {
-            this.callLayout(this.force_layout);
+            console.log('calling', this.force_layout)
+            this.callLayout(this.force_layout, this.force_layout_params);
         };
         this.drawn = true;
         this.makeGroup();

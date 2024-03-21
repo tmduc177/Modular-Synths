@@ -53,17 +53,12 @@ window.onload = function() {
     //     },
     // })
     // newDialArray.centerAroundOrigin()
-    // var newJackArray = new JackArray({
-    //     connection_array: connections,
-    //     component_constraints: {
-    //         origin_x: drawable_canvas_width / 2,
-    //         origin_y: drawable_canvas_height / 2
-    //     },
-    // })
 
-    var newDialPanel = new DialPanel({
+// TODO: propagate origin coordinates
+    var firstDialPanel = new DialPanel({
         origin_x: drawable_canvas_width / 2,
         origin_y: drawable_canvas_height / 2,
+        dials_position: 'top',
         dial_constraints: {
             origin_x: drawable_canvas_width / 2,
             origin_y: drawable_canvas_height / 2
@@ -74,9 +69,25 @@ window.onload = function() {
         },
         connection_array: connections
     })
+    firstDialPanel.move(-300, 0)
 
-    newDialPanel.draw()
-    connections.connectRandomMulti({pair_quantity: getRandomInt(1, connections.jack_objs.length / 2)})
+    var secondDialPanel = new DialPanel({
+        origin_x: drawable_canvas_width / 2,
+        origin_y: drawable_canvas_height / 2,
+        dials_position: 'top',
+        dial_constraints: {
+            origin_x: drawable_canvas_width / 2,
+            origin_y: drawable_canvas_height / 2
+        },
+        jack_constraints: {
+            origin_x: drawable_canvas_width / 2,
+            origin_y: drawable_canvas_height / 2
+        },
+        connection_array: connections
+    })
+    secondDialPanel.move(300, 0)
+
+    connections.connectRandomMulti({pair_quantity: getRandomInt(1, Math.floor(connections.jack_objs.length / 4))})
     connections.cords.bringToFront()
     connections.cords.opacity = 0.75
 

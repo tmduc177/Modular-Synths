@@ -28,8 +28,10 @@ export class DialPanel extends BasePanel {
         this.force_jack_layout_params = force_jack_layout_params;
         this.connection_array = connection_array;
         /******************************************************************************* */
+        this.draw()
     };
 
+    //TODO: refactor this
     draw() {
         var dial_array = new DialArray({
             origin_x: this.dial_constraints.origin_x ? this.dial_constraints.origin_x : 0,
@@ -38,6 +40,7 @@ export class DialPanel extends BasePanel {
             force_layout: this.force_dial_layout,
             force_layout_params: this.force_dial_layout_params
         });
+        this.addComponentArray(dial_array)
         var jack_array = new JackArray({
             origin_x: this.jack_constraints.origin_x ? this.jack_constraints.origin_x : 0,
             origin_y: this.jack_constraints.origin_y ? this.jack_constraints.origin_y: 0,
@@ -46,6 +49,7 @@ export class DialPanel extends BasePanel {
             force_layout_params: this.force_jack_layout_params,
             connection_array: this.connection_array
         });
+        this.addComponentArray(jack_array);
         var dial_array_size = dial_array.getGroupSize()
         var jack_array_size = jack_array.getGroupSize()
         if (['top', 'bottom'].includes(this.dials_position)) {
@@ -57,8 +61,8 @@ export class DialPanel extends BasePanel {
             var divider_start = new Point(this.origin_x, this.origin_y - (divider_length / 2))
             var divider_end = new Point(this.origin_x, this.origin_y + (divider_length / 2))
         }
-        var divider = new Path.Line(divider_start, divider_end)
-        applyStroke(divider)
+        // var divider = new Path.Line(divider_start, divider_end)
+        // applyStroke(divider)
         var dxf = 0; var dyf = 0;  var jxf = 0; var jyf = 0;
         switch (this.dials_position) {
             default: console.log('invalid dials position'); break;
@@ -67,10 +71,9 @@ export class DialPanel extends BasePanel {
             case 'left': dxf = -1; jxf = 1; break;
             case 'right': dxf = 1; jxf = -1; break;
         };
-        console.log('dials position', this.dials_position)
-        console.log('dxf, dyf, jxf, jyf', dxf, dyf, jxf, jyf)
-        console.log(dial_array_size, jack_array_size)
         dial_array.move(dxf * (dial_array_size.w / 2 + this.grid_size), dyf * (dial_array_size.h / 2 + this.grid_size))
         jack_array.move(jxf * (jack_array_size.w / 2 + this.grid_size), jyf * (jack_array_size.h / 2 + this.grid_size))
+        this.drawn = true;
+        this.makeGroup();
     };
 };
