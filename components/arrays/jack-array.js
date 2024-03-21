@@ -9,24 +9,16 @@ export class JackArray extends BaseComponent {
         array_width = 500,
         array_height = 500,
         force_layout = false,
-        force_layout_params = false
+        force_layout_params = false,
+        component_constraints
     }) {
-        super({grid_size, color, origin_x, origin_y, type});
-        this.array_width = array_width;
-        this.array_height = array_height;
-        this.force_layout = force_layout;
-        this.force_layout_params = force_layout_params;
-        this.layouts = [
-            this.drawMatrix
-        ];
-        this.jacks = [];
-        this.exclude_props_on_clone.concat(['jacks', 'layout']);
+        super({grid_size, color, origin_x, origin_y, type, force_layout, force_layout_params, array_width, array_height, component_constraints});
+        this.layouts = this.layouts.concat(['drawMatrix', 'drawOrbit', 'drawLeader'])
         this.draw();
-        this.makeGroup();
     };
 
     draw() {
         super.draw();
-        
-    }
+        this.makeGroup();
+    };
 };

@@ -39,7 +39,7 @@ window.onload = function() {
     // var newToggle = new Toggle({origin_x: 400, origin_y: 500});
     var newDialArray = new DialArray({
         connection_array: connections,
-        dial_constraints: {
+        component_constraints: {
             origin_x: drawable_canvas_width / 2,
             origin_y: drawable_canvas_height / 2,
             has_light: false,
