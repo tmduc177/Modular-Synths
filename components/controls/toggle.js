@@ -1,6 +1,6 @@
 const { Path, Point, Group } = paper
 import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
-import { binaryChoice, getBottomRight, getRandomElement, getTopLeft, strokePath } from "../helper-funcs.js";
+import { binaryChoice, getBottomRight, getRandomElement, getTopLeft, applyStroke } from "../helper-funcs.js";
 
 export class Toggle extends BaseComponent{
     constructor({
@@ -42,11 +42,11 @@ export class Toggle extends BaseComponent{
         var on_mark = new Path.Line(this.origin_point, new Point(this.origin_point.x + on_mark_l, this.origin_point.y));
         on_mark.position.x -= on_mark_l / 2;
         on_mark.position.y -= ((toggle.bounds.height / 2) + this.grid_size);
-        strokePath(on_mark);
+        applyStroke(on_mark);
         var off_mark_radius = on_mark_l / 2;
         var off_mark = new Path.Circle(this.origin_point, off_mark_radius);
         off_mark.position.y += ((toggle.bounds.height / 2)) + this.grid_size + off_mark_radius;
-        strokePath(off_mark)
+        applyStroke(off_mark)
         this.group.addChildren([on_mark, off_mark]);
         if (this.is_horizontal) {this.group.rotate(90)};
     };
@@ -59,17 +59,17 @@ export class Toggle extends BaseComponent{
         var track_top_left = getTopLeft(track_w, track_h, this.origin_point);
         var track_bottom_right = getBottomRight(track_w, track_h, this.origin_point);
         var track = new Path.Rectangle(track_top_left, track_bottom_right);
-        strokePath(track);
+        applyStroke(track);
         toggle.addChild(track);
         var selector_w = this.grid_size * this.track_w_factor * 0.7;
         var selector_h = ((this.grid_size * this.track_h_factor) / 2) * 0.85;
         var selector_top_left = getTopLeft(selector_w, selector_h, this.origin_point);
         var selector_bottom_right = getBottomRight(selector_w, selector_h, this.origin_point);
         var selector = new Path.Rectangle(selector_top_left, selector_bottom_right);
-        strokePath(selector);
+        applyStroke(selector);
         var selector_group = new Group([selector]);
         var first_ridge = new Path.Line(selector.bounds.topLeft, selector.bounds.topRight);
-        strokePath(first_ridge, {stroke_width: 1});
+        applyStroke(first_ridge, {scale_down_by: 2});
         var ridge_gap = selector_h / (this.ridges_factor_1 + 1)
         first_ridge.position.y += ridge_gap;
         for (var i = 1; i < this.ridges_factor_1; i++) {
@@ -91,20 +91,20 @@ export class Toggle extends BaseComponent{
         var track_top_left = getTopLeft(track_w, track_h, this.origin_point);
         var track_bottom_right = getBottomRight(track_w, track_h, this.origin_point);
         var track = new Path.Rectangle(track_top_left, track_bottom_right);
-        strokePath(track)
+        applyStroke(track)
         toggle.addChild(track);
         var selector_w = track_w * 0.8;
         var selector_h = track_h * 0.9;
         var selector_top_left = getTopLeft(selector_w, selector_h, this.origin_point)
         var selector_bottom_right = getBottomRight(selector_w, selector_h, this.origin_point)
         var selector = new Path.Rectangle(selector_top_left, selector_bottom_right);
-        strokePath(selector);
+        applyStroke(selector);
         toggle.addChild(selector);
         var ridges = new Group();
         var ridge_gap = (selector_h * 0.75) / (this.ridges_factor_2 + 1)
         var first_ridge = new Path.Line(selector_top_left, selector.bounds.topRight)
         first_ridge.position.y += ridge_gap
-        strokePath(first_ridge, {stroke_width: 1})
+        applyStroke(first_ridge, {stroke_width: 1})
         for (var i = 1; i < this.ridges_factor_2; i++) {
             var cloned_ridge = first_ridge.clone();
             cloned_ridge.position.y += (i * ridge_gap);
@@ -127,7 +127,7 @@ export class Toggle extends BaseComponent{
         toggle_edge_group.addChildren([toggle_base_edge_mask, toggle_edge]);
         toggle_edge_group.clipped = true;
         var toggle_base_ring = new Path.Circle(this.origin_point, toggle_edge_radius * 0.6);
-        strokePath(toggle_base_ring);
+        applyStroke(toggle_base_ring);
         toggle_base_group.addChildren([toggle_edge_group, toggle_base_ring]);
         var selector_group = new Group();
         var selector_radius = this.grid_size * this.hex_selector_size_factor;
@@ -148,7 +148,7 @@ export class Toggle extends BaseComponent{
         toggle_base_group.addChild(toggle_base_mask);
         toggle_base_mask.sendToBack();
         toggle_base_group.clipped = true;
-        strokePath(selector_group);
+        applyStroke(selector_group);
         toggle.addChildren([toggle_base_group, selector_group]);
         return toggle;
     }

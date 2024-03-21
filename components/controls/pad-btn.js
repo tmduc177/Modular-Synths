@@ -1,6 +1,6 @@
 const { Path, Point, Group } = paper
 import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
-import { binaryChoice, strokePath } from "../helper-funcs.js";
+import { binaryChoice, applyStroke } from "../helper-funcs.js";
 
 export class PadBtn extends BaseComponent {
     constructor({
@@ -40,7 +40,7 @@ export class PadBtn extends BaseComponent {
                 this.group.addChild(light);
             };
         };
-        strokePath(edge);
+        applyStroke(edge);
         this.group.addChild(edge);
     };
 
@@ -64,13 +64,13 @@ export class PadBtn extends BaseComponent {
                 diagonal.clone().rotate(-90, this.origin_point)
             ]);
         };
-        strokePath(raised_edge, {stroke_width: 1});
+        applyStroke(raised_edge, {scale_down_by: 2});
         var light = this.drawIndicator();
         var clipping_mask = edge.clone().subtract(light.clone());
         raised.addChild(clipping_mask);
         raised.addChild(raised_edge);
         raised.clipped = true;
-        strokePath(raised, {stroke_width: 1});
+        applyStroke(raised, {scale_down_by: 2});
         return raised;
     };
 
@@ -81,7 +81,7 @@ export class PadBtn extends BaseComponent {
         var bottom_right = new Point(this.origin_point.x + (width / 2), this.origin_point.y + (height / 2));
         var light = new Path.Rectangle(top_left, bottom_right);
         light.position.y -= (((this.length_factor * this.grid_size) / 2) - (height / 2))
-        strokePath(light, {stroke_width: 1})
+        applyStroke(light, {scale_down_by: 2})
         var light_is_on = binaryChoice(0.5, true, false);
         if (light_is_on) {light.fillColor = this.color}
         return light;

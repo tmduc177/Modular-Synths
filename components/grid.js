@@ -1,6 +1,6 @@
 const { Path, Point, Group, PointText } = paper
 import { BaseComponent } from "./base-component.js";
-import { strokePath } from "./helper-funcs.js";
+import { applyStroke } from "./helper-funcs.js";
 
 export class BaseGrid extends BaseComponent {
     constructor({
@@ -31,20 +31,20 @@ export class BaseGrid extends BaseComponent {
         var verticals = new Group();
         var horizontals = new Group();
         var first_vertical = new Path.Line(this.top_left, this.bottom_left);
-        strokePath(first_vertical, {stroke_width: 0.25})
+        applyStroke(first_vertical, {scale_down_by: 8})
         for (var i = 0; i < (this.total_width / this.grid_size); i++) {
             var cloned_vertical = first_vertical.clone()
             cloned_vertical.position.x += i * this.grid_size;
-            if (i % 5 == 0) {strokePath(cloned_vertical, {stroke_width: 0.5})}
+            if (i % 5 == 0) {applyStroke(cloned_vertical, {scale_down_by: 4})}
             verticals.addChild(cloned_vertical)
         };
         verticals.addChild(first_vertical);
         var first_horizontal = new Path.Line(this.top_left, this.top_right);
-        strokePath(first_horizontal, {stroke_width: 0.25})
+        applyStroke(first_horizontal, {scale_down_by: 8})
         for (var i = 0; i < (this.total_height / this.grid_size); i++) {
             var cloned_horizontal = first_horizontal.clone();
             cloned_horizontal.position.y += i * this.grid_size;
-            if (i % 5 == 0) {strokePath(cloned_horizontal, {stroke_width: 0.5})}
+            if (i % 5 == 0) {applyStroke(cloned_horizontal, {scale_down_by: 4})}
             horizontals.addChild(cloned_horizontal);
         };
         horizontals.addChild(first_horizontal);

@@ -74,7 +74,7 @@ window.onload = function() {
     })
 
     newDialPanel.draw()
-    connections.connectRandomMulti({pair_quantity: getRandomInt(1, connections.jacks.length / 2)})
+    connections.connectRandomMulti({pair_quantity: getRandomInt(1, connections.jack_objs.length / 2)})
     connections.cords.bringToFront()
     connections.cords.opacity = 0.75
 

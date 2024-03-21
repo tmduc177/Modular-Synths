@@ -7,4 +7,8 @@ export class BasePanel extends BaseComponent {
     }) {
         super({grid_size, color, origin_x, origin_y, type})
     };
+
+    move(by_x, by_y) {
+        
+    }
 };

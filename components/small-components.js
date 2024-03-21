@@ -1,5 +1,5 @@
 import { BaseComponent } from "./base-component.js";
-import { binaryChoice, getRandomElement, getRandomInt, strokePath, getRandomString } from "./helper-funcs.js";
+import { binaryChoice, getRandomElement, getRandomInt, getRandomString, applyStroke } from "./helper-funcs.js";
 const { Path, Point, Group, PointText } = paper;
 
 export class Jack extends BaseComponent {
@@ -25,7 +25,7 @@ export class Jack extends BaseComponent {
         const { force_name } = options
         super.draw();
         var jack_hole = new Path.Circle(this.origin_point, this.grid_size);
-        strokePath(jack_hole);
+        applyStroke(jack_hole)
         this.group.addChild(jack_hole)
         var jack_ring = new Path.Circle(this.origin_point, this.grid_size * 1.25);
         var jack_ring_clone = jack_ring.clone();
@@ -79,7 +79,7 @@ export class StatusLight extends BaseComponent {
         } else {
             light = new Path.Circle(this.origin_point, this.grid_size / 2);
         };
-        strokePath(light);
+        applyStroke(light);
         if (this.on_status) {
             light.fillColor = this.color;
         };
@@ -124,7 +124,7 @@ export class Cord extends BaseComponent {
     drawCord() {
         var cord = new Path.Line(this.in_point, this.out_point);
         this.sagCord(cord);
-        strokePath(cord, {stroke_width: 5});
+        applyStroke(cord, {scale_down_by: 2/5})
         cord.strokeColor = this.cord_color;
         return cord;
     };

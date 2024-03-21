@@ -1,7 +1,7 @@
 const { Path, Point, Group } = paper;
 import { DialArray } from "../arrays/dial-array.js";
 import { JackArray } from "../arrays/jack-array.js";
-import { strokePath } from "../helper-funcs.js";
+import { applyStroke } from "../helper-funcs.js";
 import { BasePanel } from "./base-panel.js";
 
 export class DialPanel extends BasePanel {
@@ -61,6 +61,6 @@ export class DialPanel extends BasePanel {
         var divider_start = new Point(initial_origin.x, initial_origin.y - (divider_length / 2))
         var divider_end = new Point(initial_origin.x, initial_origin.y + (divider_length / 2))
         var divider = new Path.Line(divider_start, divider_end)
-        strokePath(divider)
+        applyStroke(divider)
     };
 };

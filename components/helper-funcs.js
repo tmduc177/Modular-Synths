@@ -1,16 +1,17 @@
 const { Point } = paper;
-import { default_grid_size, default_color } from './base-component.js'
+
+import { default_grid_size, default_color } from "./base-component.js";
 
 var default_stroke_width = default_grid_size / 5
 var default_stroke_color = default_color
 
 export function applyStroke(path, options = {}) {
-    const { 
+    var { 
         width = default_stroke_width,
-        half_width = false,
+        scale_down_by = false,
         color = default_color
-    };
-    if (half_width) {width = width / 2};
+    } = options;
+    if (scale_down_by) {width = width / scale_down_by};
     path.strokeWidth = width;
     path.strokeColor = color;
 };

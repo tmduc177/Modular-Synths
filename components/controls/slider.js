@@ -1,6 +1,6 @@
 const { Path, Point, Group } = paper
 import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
-import { binaryChoice, decimalPoint, getRandomElement, getRandomInt, strokePath } from "../helper-funcs.js";
+import { binaryChoice, decimalPoint, getRandomElement, getRandomInt, applyStroke } from "../helper-funcs.js";
 import { Jack, StatusLight } from "../small-components.js";
 
 export class Slider extends BaseComponent {
@@ -66,7 +66,7 @@ export class Slider extends BaseComponent {
         var track = this.drawTrack();
         var notches = new Group();
         if (this.mark_quantity) {
-            var marks = this.drawNotches(this.mark_quantity, this.mark_w, 2);
+            var marks = this.drawNotches(this.mark_quantity, this.mark_w, this.grid_size / 5);
             notches.addChild(marks);
         }
         var tick_quantity = this.tick_quantity_factor;
@@ -75,7 +75,7 @@ export class Slider extends BaseComponent {
             tick_quantity = this.tick_with_mark_chance ? rounded_tick_quantity : 0;
         };
         if (tick_quantity) {
-            var ticks = this.drawNotches(tick_quantity, this.tick_w, 1);
+            var ticks = this.drawNotches(tick_quantity, this.tick_w, this.grid_size / 10);
             notches.addChild(ticks);
         };
         var bottom_layer = new Group([track, notches]);
@@ -107,7 +107,7 @@ export class Slider extends BaseComponent {
         } else {
             knob_edge = new Path.Circle(this.origin_point, this.knob_radius)
         };
-        strokePath(knob_edge);
+        applyStroke(knob_edge);
         knob.addChild(knob_edge);
         if (this.knob_ridges && this.knob_edges) {
             var ridges = this.drawRidges(knob_w, knob_h);
@@ -139,7 +139,7 @@ export class Slider extends BaseComponent {
             ridges.addChild(cloned_ridge);
         };
         ridges.addChild(first_ridge);
-        strokePath(ridges, {stroke_width: 1});
+        applyStroke(ridges, {scale_down_by: 2});
         return ridges;
     };
 
@@ -149,7 +149,7 @@ export class Slider extends BaseComponent {
         var start_point = new Point(this.origin_point.x - indicator_offset, this.origin_point.y);
         var end_point = new Point(this.origin_point.x + indicator_offset, this.origin_point.y);
         var first_indicator = new Path.Line(start_point, end_point);
-        strokePath(indicator);
+        applyStroke(indicator);
         if (this.indicator_is_disconnected) {
             var gap_length = indicator_offset * 2 * this.indicator_gap_factor;
             var line_factor = (1 - this.indicator_gap_factor) / 2;
@@ -159,7 +159,7 @@ export class Slider extends BaseComponent {
             indicator.addChild(right_indicator);
         }
         indicator.addChild(first_indicator)
-        strokePath(indicator);
+        applyStroke(indicator);
         return indicator;
     };
 
@@ -167,7 +167,7 @@ export class Slider extends BaseComponent {
         var top_left = new Point(this.origin_point.x - (this.grid_size / 4), this.origin_point.y - (this.track_length / 2));
         var bottom_right = bottom_right = new Point(this.origin_point.x + (this.grid_size / 4), this.origin_point.y + (this.track_length / 2));
         var track = new Path.Rectangle(top_left, bottom_right);
-        strokePath(track);
+        applyStroke(track);
         if (this.track_is_filled) {track.fillColor = this.color};
         return track;
     };
@@ -179,7 +179,7 @@ export class Slider extends BaseComponent {
         var end_point = new Point(this.origin_point.x - this.grid_size - width, this.origin_point.y - this.track_length / 2);
         var first_notch = new Path.Line(start_point, end_point);
         var gap = 0;
-        strokePath(first_notch, {stroke_width: stroke_thickness});
+        applyStroke(first_notch, {width: stroke_thickness});
         left_notches.addChild(first_notch)
         if (quantity - 1) {
             gap = this.track_length / (quantity - 1);            

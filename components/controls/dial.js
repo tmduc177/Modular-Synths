@@ -1,6 +1,6 @@
 const { Point, Path, Group, PointText } = paper;
 import { BaseComponent } from "../base-component.js";
-import { decimalPoint, getRandomElement, getRandomInt, strokePath, binaryChoice, getRandomString } from "../helper-funcs.js";
+import { decimalPoint, getRandomElement, getRandomInt, applyStroke, binaryChoice, getRandomString } from "../helper-funcs.js";
 import { Jack, StatusLight } from "../small-components.js";
 
 export class Dial extends BaseComponent {
@@ -75,7 +75,7 @@ export class Dial extends BaseComponent {
         var knob_radius = this.grid_size * this.knob_radius_factor;
         var knob = new Path.Circle(this.origin_point, knob_radius);
         if (this.knob_is_grooved) {knob = this.groovifyKnob(knob, knob_radius)};
-        strokePath(knob);
+        applyStroke(knob);
         this.group.addChild(knob)
         if (this.outer_ring_size_factor) {
             var outer_ring = this.drawOuterRing(knob, knob_radius)
@@ -128,7 +128,7 @@ export class Dial extends BaseComponent {
         }; 
         var stretch = this.indicator_sides ? this.indicator_stretch_factor : 1;
         indicator.scale(1, stretch, indicator.bounds.topCenter)
-        strokePath(indicator);
+        applyStroke(indicator);
         if (this.indicator_is_filled) {
             indicator.fillColor = this.color;
         };
@@ -168,7 +168,7 @@ export class Dial extends BaseComponent {
         } else {
             first_mark = new Path.Circle(this.origin_point, radius);
         };
-        strokePath(first_mark);
+        applyStroke(first_mark);
         if (this.mark_is_filled) {first_mark.fillColor = this.color};
         first_mark.position.y -= distance;
         first_mark.rotate(this.start_angle, this.origin_point);
@@ -199,12 +199,12 @@ export class Dial extends BaseComponent {
             var cloned_tick = first_tick.clone();
             cloned_tick.rotate(i * arc, this.origin_point);
             if (!to_exclude.includes(i)) {
-                strokePath(cloned_tick);
+                applyStroke(cloned_tick);
             };
             ticks.addChild(cloned_tick);
         };
         if (!mark_quantity) {
-            strokePath(first_tick);
+            applyStroke(first_tick);
             ticks.addChild(first_tick);
         };
         return ticks;
