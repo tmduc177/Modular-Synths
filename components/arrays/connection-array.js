@@ -6,33 +6,28 @@ import { Cord } from "../small-components.js";
 export class ConnectionArray {
     constructor() {
         this.jacks = []
+        this.jack_objs = []
         this.cords = new Group();
     };
 
-    addJack(jack_group) {
-        var pseudo_jack = {
-            x: jack_group.position.x,
-            y: jack_group.position.y,
-            connected: false,
-            to: false
-        };
-        this.jacks.push(pseudo_jack)
+    addJackObj(jack_obj) {
+        this.jack_objs.push(jack_obj);
     };
 
-    addJacks(jacks) {
-        for (var i = 0; i < jacks.length; i++) {
-            this.addJack(jacks[i]);
+    addJackObjs(jack_objs) {
+        for (var i = 0; i < jack_objs.length; i++) {
+            this.addJackObj(jack_objs[i]);
         };
     };
-
+    
     connectPair(in_index, out_index) {
-        this.jacks[in_index].connected = true;
-        this.jacks[in_index].to = out_index;
-        this.jacks[out_index].connected = true;
-        this.jacks[out_index].to = in_index;
+        this.jack_objs[in_index].connected = true;
+        this.jack_objs[in_index].to = out_index;
+        this.jack_objs[out_index].connected = true;
+        this.jack_objs[out_index].to = in_index;
         var cord_obj = new Cord({
-            in_co_ords: [this.jacks[in_index].x, this.jacks[in_index].y], 
-            out_co_ords: [this.jacks[out_index].x, this.jacks[out_index].y]
+            in_co_ords: [this.jack_objs[in_index].origin_x, this.jack_objs[in_index].origin_y], 
+            out_co_ords: [this.jack_objs[out_index].origin_x, this.jack_objs[out_index].origin_y]
         });
         this.cords.addChild(cord_obj.group)
     };
@@ -45,8 +40,8 @@ export class ConnectionArray {
 
     getRandomUnconnectedJack(options = {}) {
         const { exclude } = options;
-        var jack_index = getRandomInt(0, this.jacks.length - 1);
-        if (jack_index == exclude || this.jacks[jack_index].connected == true) {
+        var jack_index = getRandomInt(0, this.jack_objs.length - 1);
+        if (jack_index == exclude || this.jack_objs[jack_index].connected == true) {
             jack_index = this.getRandomUnconnectedJack(options);
         };
         return jack_index;
@@ -54,7 +49,7 @@ export class ConnectionArray {
 
     connectRandomMulti(options = {}) {
         const { pair_quantity = 1 } = options;
-        var total_possible_pairs = Math.floor(this.jacks.length / 2);
+        var total_possible_pairs = Math.floor(this.jack_objs.length / 2);
         var final_pair_quantity = pair_quantity < total_possible_pairs ? pair_quantity : total_possible_pairs;
         for (var i = 1; i <= final_pair_quantity; i++) {
             this.connectRandomPair();

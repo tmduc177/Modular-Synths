@@ -3,7 +3,7 @@ import { BaseComponentArray } from "./base-component-array.js";
 import { binaryChoice, getRandomElement, getRandomInt } from "../helper-funcs.js";
 import { Dial } from "../controls/dial.js";
 
-function estimateSize(params) {
+function estimateDialSize(params) {
     var outer_ring_radius = (1 + params.outer_ring_size_factor) * (params.knob_radius_factor * params.grid_size);
     var notches_distance = outer_ring_radius * params.notch_distance_factor;
     var delta_distance = notches_distance - outer_ring_radius;
@@ -32,7 +32,7 @@ export class DialArray extends BaseComponentArray {
     }) {
         super({grid_size, color, origin_x, origin_y, type, force_layout, force_layout_params, array_width, array_height, component_constraints});
         /************************************************************/
-        this.layouts = this.layouts.concat(['drawMatrix', 'drawOrbit', 'drawLeader'])
+        this.layouts = ['drawMatrix', 'drawOrbit', 'drawLeader']
         this.draw();
     };
 
@@ -52,7 +52,7 @@ export class DialArray extends BaseComponentArray {
         var follower_size_factor = getRandomElement([1.5, 2]);
         follower_params.knob_radius_factor = follower_params.knob_radius_factor / follower_size_factor;
         follower_params.indicator_size_factor = follower_params.indicator_size_factor / follower_size_factor;
-        var follower_size = estimateSize(follower_params);
+        var follower_size = estimateDialSize(follower_params);
         switch (leader_position) {
             case 'top':
                 var first_follower_x = template_params.origin_x - (((follower_size.est_w + this.grid_size) / 2) * (follower_cols - 1));
@@ -71,6 +71,7 @@ export class DialArray extends BaseComponentArray {
                 [follower_cols, follower_rows] = [follower_rows, follower_cols];
                 var first_follower_x = template_params.origin_x - (template_size.est_w / 2) - (follower_cols * this.grid_size) - ((((2 * follower_cols) - 1) * follower_size.est_w) / 2);
                 var first_follower_y = template_params.origin_y - (((follower_size.est_w / 2) + this.grid_size) * (follower_rows - 1));
+                break;
             default:
                 console.log('invalid leader position');
                 break;
@@ -84,7 +85,7 @@ export class DialArray extends BaseComponentArray {
         var template_constraints = constraints ? constraints : this.component_constraints;
         var template_dial = new Dial(template_constraints);
         var template_params = template_dial.cloneDeterminants();
-        var template_size = estimateSize(template_params);
+        var template_size = estimateDialSize(template_params);
         template_dial = null;
         return {template_params: template_params, template_size: template_size};
     }
@@ -99,7 +100,7 @@ export class DialArray extends BaseComponentArray {
         var first_dial = new Dial(first_dial_params);
         first_dial.draw();
         this.components.push(first_dial)
-        var first_dial_size = estimateSize(first_dial.cloneDeterminants());
+        var first_dial_size = estimateDialSize(first_dial.cloneDeterminants());
         var shift_x = first_dial_size.est_w + this.grid_size;
         var shift_y = first_dial_size.est_h + this.grid_size;
         var stagger_y = stagger == 'y' ? (first_dial_size.est_h / 2) : 0;
@@ -139,7 +140,7 @@ export class DialArray extends BaseComponentArray {
         var orbit_params = center.cloneDeterminants();
         orbit_params.knob_radius_factor = orbit_params.knob_radius_factor / orbit_r_scaler;
         orbit_params.indicator_size_factor = orbit_params.indicator_size_factor / orbit_r_scaler;
-        var est_orbit_size = estimateSize(orbit_params);
+        var est_orbit_size = estimateDialSize(orbit_params);
         var orbit_radius = (template_size.est_h / 2) + (est_orbit_size.est_h / 2);
         var arc_radian = (2 * Math.PI) / orbit_quantity;
         var rotation_center = center.origin_point;

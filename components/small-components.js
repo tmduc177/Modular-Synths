@@ -1,6 +1,6 @@
 import { BaseComponent } from "./bases-and-canvas-elements/base-component.js";
-import { binaryChoice, getRandomElement, getRandomInt, strokePath } from "./helper-funcs.js";
-const { Path, Point, Group } = paper;
+import { binaryChoice, getRandomElement, getRandomInt, strokePath, getRandomString } from "./helper-funcs.js";
+const { Path, Point, Group, PointText } = paper;
 
 export class Jack extends BaseComponent {
     constructor({
@@ -11,14 +11,18 @@ export class Jack extends BaseComponent {
         connection_array
     }) {
         super({grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left, type});
+        /***********************************************************/
         this.border_edges = border_edges;
         this.border_fill = border_fill;
         this.connection_array = connection_array;
-        this.draw();
-        this.connection_array.addJack(this.group)
+        /***********************************************************/
+        this.connected = false;
+        this.connected_to = false;
+        this.exclude_props_on_clone.concat(['connected', 'connected_to'])
     };
 
-    draw() {
+    draw(options = {}) {
+        const { force_name } = options
         super.draw();
         var jack_hole = new Path.Circle(this.origin_point, this.grid_size);
         strokePath(jack_hole);
@@ -35,7 +39,22 @@ export class Jack extends BaseComponent {
         border = border.subtract(jack_ring_clone);
         border.fillColor = this.color;
         this.group.addChild(border)
+        this.connection_array.addJackObj(this)
+        this.drawName({force_name: force_name})
     };
+
+    drawName(options = {}) {
+        const { force_name } = options;
+        var text_x = this.group.position.x
+        var text_y = this.group.position.y + (this.group.bounds.height / 2) + this.grid_size
+        var jack_name = new PointText(new Point(text_x, text_y))
+        jack_name.justification = 'center'
+        jack_name.fontFamily = 'monospace'
+        jack_name.fontWeight = 'bold'
+        jack_name.content = force_name ? force_name : getRandomString();
+        jack_name.fillColor = this.color
+        this.group.addChild(jack_name)
+    }
 };
 
 export class StatusLight extends BaseComponent {

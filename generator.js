@@ -5,6 +5,7 @@ import { Dial } from "./components/controls/dial.js";
 import { DialArray } from "./components/arrays/dial-array.js";
 import { getRandomInt } from "./components/helper-funcs.js";
 import { BaseGrid } from "./components/bases-and-canvas-elements/grid.js";
+import { JackArray } from "./components/arrays/jack-array.js";
 
 var bottom_canvas_height = window.innerHeight;
 var bottom_canvas_width = window.innerWidth;
@@ -18,6 +19,12 @@ const grid_size = 10;
 if (bottom_canvas_width < 768) {
     drawable_canvas_width = bottom_canvas_width * 0.8
 }
+
+/*  
+    CREATE CONNECTION ARRAY FIRST,
+    THEN CREATE PANELS
+    CONNECT THE CONNECTION ARRAY LAST
+*/
 
 window.onload = function() {
     var background_fill = document.getElementById('background-fill');
@@ -37,16 +44,24 @@ window.onload = function() {
     // var newSlider = new Slider({origin_x: 400, origin_y: 200, has_jack: true, connection_array: connections});
     // var newPadBtn = new PadBtn({origin_x: 100, origin_y: 500});
     // var newToggle = new Toggle({origin_x: 400, origin_y: 500});
-    var newDialArray = new DialArray({
+    // var newDialArray = new DialArray({
+    //     component_constraints: {
+    //         origin_x: drawable_canvas_width / 2,
+    //         origin_y: drawable_canvas_height / 2,
+    //         has_light: false,
+    //     },
+    // })
+    // newDialArray.centerAroundOrigin()
+    var newJackArray = new JackArray({
         connection_array: connections,
         component_constraints: {
             origin_x: drawable_canvas_width / 2,
-            origin_y: drawable_canvas_height / 2,
-            has_light: false,
-        }
+            origin_y: drawable_canvas_height / 2
+        },
     })
-    newDialArray.centerAroundOrigin()
+    newJackArray.centerAroundOrigin()
     connections.connectRandomMulti({pair_quantity: getRandomInt(1, connections.jacks.length / 2)})
     connections.cords.bringToFront()
     connections.cords.opacity = 0.75
+
 }

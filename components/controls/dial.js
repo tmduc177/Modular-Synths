@@ -60,11 +60,12 @@ export class Dial extends BaseComponent {
         // this.draw()
     };
 
-    draw() {
+    draw(options = {}) {
+        const { force_name } = options;
         super.draw();
         this.drawKnob();
         this.drawNotches();
-        this.drawName();
+        this.drawName({force_name: force_name});
         // if (this.has_jack) {this.drawJack()};
         if (this.has_light) {this.drawLight()};
         this.drawn = true;
