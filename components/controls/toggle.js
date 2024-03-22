@@ -1,4 +1,5 @@
 const { Path, Point, Group } = paper
+import { defaults } from "../default-values.js";
 import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
 import { binaryChoice, getBottomRight, getRandomElement, getTopLeft, applyStroke } from "../helper-funcs.js";
 
@@ -6,7 +7,7 @@ export class Toggle extends BaseComponent{
     constructor({
         grid_size, color, origin_x, origin_y,
         type = 'Toggle',
-        style = getRandomElement([1, 2, 3]),
+        style = getRandomElement(defaults.toggle.style),
         is_horizontal = binaryChoice(0.5, true, false),
         hex_size_factor = 3,
         hex_selector_size_factor = 1,

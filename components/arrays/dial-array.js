@@ -1,5 +1,5 @@
 import { BaseComponentArray } from "./base-component-array.js";
-import { binaryChoice, getRandomElement, getRandomInt } from "../helper-funcs.js";
+import { getRandomElement, getRandomInt } from "../helper-funcs.js";
 import { Dial } from "../controls/dial.js";
 
 function estimateDialSize(params) {

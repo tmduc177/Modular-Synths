@@ -1,5 +1,4 @@
-const { Path, Point, Group } = paper;
-import { default_grid_size, default_color } from "../base-component.js";
+const { Group } = paper;
 import { getRandomInt } from "../helper-funcs.js";
 import { Cord } from "../small-components.js";
 

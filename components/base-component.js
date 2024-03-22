@@ -1,13 +1,11 @@
 const { Point, Group } = paper;
-
-export const default_grid_size = 10;
-export const default_color = 'white';
+import { defaults } from "./default-values.js"
 
 export class BaseComponent{
     constructor({
         type = 'BaseComponent',
-        grid_size = default_grid_size,
-        color = default_color,
+        grid_size = defaults.grid_size,
+        color = defaults.color,
         origin_x = 0,
         origin_y = 0
     }) {

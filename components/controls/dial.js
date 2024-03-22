@@ -1,34 +1,32 @@
 const { Point, Path, Group, PointText } = paper;
+import { defaults } from "../default-values.js";
 import { BaseComponent } from "../base-component.js";
 import { decimalPoint, getRandomElement, getRandomInt, applyStroke, binaryChoice, getRandomString } from "../helper-funcs.js";
-import { Jack, StatusLight } from "../small-components.js";
+import { StatusLight } from "../small-components.js";
 
 export class Dial extends BaseComponent {
     constructor({
         grid_size, origin_x, origin_y, color,
         type = 'Dial',
-        knob_radius_factor = getRandomElement([1.5, 2, 2.5, 3, 4]),
+        knob_radius_factor = getRandomElement(defaults.dial.knob_radius_factor),
         knob_is_grooved = binaryChoice(0.5, true, false),
-        outer_ring_size_factor = getRandomElement([0, 0.25, 0.3, 0.5]),
-        indicator_sides = getRandomElement([0, 1, 3, 4]),
-        indicator_size_factor = getRandomElement([0.2, 0.25, 0.3]),
+        outer_ring_size_factor = getRandomElement(defaults.dial.outer_ring_size_factor),
+        indicator_sides = getRandomElement(defaults.dial.indicator_sides),
+        indicator_size_factor = getRandomElement(defaults.dial.indicator_size_factor),
         indicator_is_filled = binaryChoice(0.5, true, false),
         indicator_is_diamond = binaryChoice(0.5, true, false),
-        indicator_stretch_factor = getRandomElement([1, 1.5, 2, 3]),
-        notch_distance_factor = getRandomElement([1.5,]),
-        mark_quantity = getRandomElement([0, 2, 3, 4, 5, 6]),
-        mark_sides = getRandomElement([0, 3, 4]),
-        mark_size_factor = getRandomElement([1, 1.5]),
-        mark_stretch_factor = getRandomElement([1, 2, 3]),
+        indicator_stretch_factor = getRandomElement(defaults.dial.indicator_stretch_factor),
+        notch_distance_factor = getRandomElement([1.5]),
+        mark_quantity = getRandomElement(defaults.dial.mark_quantity),
+        mark_sides = getRandomElement(defaults.dial.mark_sides),
+        mark_size_factor = getRandomElement(defaults.dial.mark_size_factor),
+        mark_stretch_factor = getRandomElement(defaults.dial.mark_stretch_factor),
         mark_is_filled = binaryChoice(0.5, true, false),
         tick_chance_with_mark = binaryChoice(0.5, true, false),
         tick_quantity_factor = getRandomInt(5,20),
-        tick_size_factor = getRandomElement([0.5, 0.75, 1]),
-        // has_jack = binaryChoice(0.5, true, false),
-        // jack_edges = getRandomElement([0, 6]),
+        tick_size_factor = getRandomElement(defaults.dial.tick_size_factor),
         has_light = binaryChoice(0.5, true, false),
         light_edges = binaryChoice(0.5, 0, 4),
-        // connection_array
     }) {
         super({grid_size, origin_x, origin_y, color, type});
         /* ------------------------------------------------------ */
@@ -51,13 +49,9 @@ export class Dial extends BaseComponent {
         this.tick_chance_with_mark = tick_chance_with_mark;
         this.tick_quantity_factor = tick_quantity_factor;
         this.tick_size_factor = tick_size_factor;
-        // this.has_jack = has_jack;
-        // this.jack_edges = jack_edges;
         this.has_light = has_light;
         this.light_edges = light_edges;
-        // this.connection_array = connection_array;
         /* ------------------------------------------------------ */
-        // this.draw()
     };
 
     draw(options = {}) {
@@ -66,7 +60,6 @@ export class Dial extends BaseComponent {
         this.drawKnob();
         this.drawNotches();
         this.drawName({force_name: force_name});
-        // if (this.has_jack) {this.drawJack()};
         if (this.has_light) {this.drawLight()};
         this.drawn = true;
     };
@@ -222,13 +215,6 @@ export class Dial extends BaseComponent {
         knob_name.content = force_name ? force_name : getRandomString();
         knob_name.fillColor = this.color
         this.group.addChild(knob_name)
-    };
-
-    drawJack() {
-        // var jack_center_x = this.group.position.x;
-        // var jack_center_y = this.group.position.y + (this.group.bounds.height / 2) + (this.grid_size * 2);
-        // var jack = new Jack({origin_x: jack_center_x, origin_y: jack_center_y, border_edges: this.jack_edges, connection_array: this.connection_array});
-        // this.group.addChild(jack.group);
     };
 
     drawLight() {

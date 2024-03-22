@@ -1,20 +1,21 @@
 const { Path, Point, Group } = paper
+import { defaults } from "../default-values.js";
 import { BaseComponent } from "../bases-and-canvas-elements/base-component.js";
-import { binaryChoice, decimalPoint, getRandomElement, getRandomInt, applyStroke } from "../helper-funcs.js";
+import { binaryChoice, decimalPoint, getRandomElement,defaults.slider. getRandomInt, applyStroke } from "../helper-funcs.js";
 import { Jack, StatusLight } from "../small-components.js";
 
 export class Slider extends BaseComponent {
     constructor({
-        grid_size, color, origin_x, origin_y, padding_top, padding_bottom, padding_right, padding_left,
+        grid_size, color, origin_x, origin_y,
         type = 'Slider',
         is_horizontal = binaryChoice(0.5, true, false),
-        knob_edges = getRandomElement([0, 4]),
-        knob_h_factor = getRandomElement([1, 1.5, 2, 3, 4]),
-        knob_w_factor = getRandomElement([1.5, 2, 2.5, 3, 4]),
-        knob_radius_factor = getRandomElement([1, 1.5, 2]),
+        knob_edges = getRandomElement(defaults.slider.knob_edges),
+        knob_h_factor = getRandomElement(defaults.slider.knob_h_factor),
+        knob_w_factor = getRandomElement(defaults.slider.knob_w_factor),
+        knob_radius_factor = getRandomElement(defaults.slider.knob_radius_factor),
         knob_ridges = binaryChoice(0.5, 0, getRandomInt(2,6)),
         indicator_is_disconnected = binaryChoice(0.5, true, false),
-        indicator_gap_factor = getRandomElement([0.25, 0.5]),
+        indicator_gap_factor = getRandomElement(defaults.slider.indicator_gap_factor),
         track_length_factor = getRandomInt(15, 30),
         track_is_filled = binaryChoice(0.5, true, false),
         mark_quantity = getRandomInt(0,5),

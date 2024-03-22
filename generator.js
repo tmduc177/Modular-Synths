@@ -54,19 +54,10 @@ window.onload = function() {
     // })
     // newDialArray.centerAroundOrigin()
 
-// TODO: propagate origin coordinates
     var firstDialPanel = new DialPanel({
         origin_x: drawable_canvas_width / 2,
         origin_y: drawable_canvas_height / 2,
         dials_position: 'top',
-        dial_constraints: {
-            origin_x: drawable_canvas_width / 2,
-            origin_y: drawable_canvas_height / 2
-        },
-        jack_constraints: {
-            origin_x: drawable_canvas_width / 2,
-            origin_y: drawable_canvas_height / 2
-        },
         connection_array: connections
     })
     firstDialPanel.move(-300, 0)
@@ -75,14 +66,6 @@ window.onload = function() {
         origin_x: drawable_canvas_width / 2,
         origin_y: drawable_canvas_height / 2,
         dials_position: 'top',
-        dial_constraints: {
-            origin_x: drawable_canvas_width / 2,
-            origin_y: drawable_canvas_height / 2
-        },
-        jack_constraints: {
-            origin_x: drawable_canvas_width / 2,
-            origin_y: drawable_canvas_height / 2
-        },
         connection_array: connections
     })
     secondDialPanel.move(300, 0)

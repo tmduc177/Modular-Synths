@@ -1,15 +1,16 @@
+import { defaults } from "./default-values.js"
 const { Point } = paper;
 
-import { default_grid_size, default_color } from "./base-component.js";
+console.log(defaults)
 
-var default_stroke_width = default_grid_size / 5
-var default_stroke_color = default_color
+const default_stroke_width = defaults.grid_size / 5
+const default_stroke_color = defaults.color
 
 export function applyStroke(path, options = {}) {
     var { 
         width = default_stroke_width,
         scale_down_by = false,
-        color = default_color
+        color = default_stroke_color
     } = options;
     if (scale_down_by) {width = width / scale_down_by};
     path.strokeWidth = width;
@@ -59,3 +60,4 @@ export function getRandomString(options = {}) {
 export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
